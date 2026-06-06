@@ -2,7 +2,6 @@ import MainTitle from "./MainTitle";
 import ProductCard from "./ProductCard";
 import sampleProducts from "../data/sampleProducts";
 import { Link } from "react-router";
-import { BiArrowToLeft } from "react-icons/bi";
 import { GoArrowLeft } from "react-icons/go";
 
 const FeaturedProducts = () => {
@@ -19,7 +18,7 @@ const FeaturedProducts = () => {
             description="أفضل المنتجات المختارة بعناية لتضمن جودة وأداء متميزين."
           />
           <Link
-            to="/products"
+            to="/shop"
             className="flex items-center gap-2 text-(--main-color) hover:bg-slate-100 font-bold"
           >
             <span> عرض الكل</span>

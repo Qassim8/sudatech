@@ -1,10 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import sampleProducts from "../data/sampleProducts";
 
-const ShopGrid = () => {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("");
+const ShopGrid = ({ filters = {} }) => {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
@@ -18,16 +16,75 @@ const ShopGrid = () => {
   }, []);
 
   const filtered = products.filter((p) => {
-    if (query && !p.name.includes(query) && !p.description.includes(query))
+    const q = (filters.search || "").toLowerCase();
+    if (
+      q &&
+      !p.name.toLowerCase().includes(q) &&
+      !p.description.toLowerCase().includes(q)
+    )
       return false;
-    if (category && !p.brand?.includes(category) && !p.name?.includes(category))
-      return false;
+
+    if (filters.categories && filters.categories.length > 0) {
+      const cats = filters.categories.map((c) => c.toLowerCase());
+      const matchCat = cats.some(
+        (c) =>
+          p.name.toLowerCase().includes(c) ||
+          p.brand?.toLowerCase().includes(c),
+      );
+      if (!matchCat) return false;
+    }
+
+    if (filters.brands && filters.brands.length > 0) {
+      const brands = filters.brands.map((b) => b.toLowerCase());
+      if (!brands.includes((p.brand || "").toLowerCase())) return false;
+    }
+
+    if (typeof filters.maxPrice === "number") {
+      const priceNum = Number(String(p.price).replace(/[^0-9.]/g, "")) || 0;
+      if (priceNum > filters.maxPrice) return false;
+    }
+
+    if (filters.inStockOnly) {
+      // sample data doesn't have stock; assume all in stock
+    }
+
     return true;
   });
 
+  // sorting
+  let sorted = filtered.slice();
+  if (filters.sort) {
+    if (filters.sort === "newest") {
+      sorted.sort((a, b) => Number(b.id) - Number(a.id));
+    } else if (filters.sort === "price-asc") {
+      sorted.sort(
+        (a, b) =>
+          (Number(String(a.price).replace(/[^0-9.]/g, "")) || 0) -
+          (Number(String(b.price).replace(/[^0-9.]/g, "")) || 0),
+      );
+    } else if (filters.sort === "price-desc") {
+      sorted.sort(
+        (a, b) =>
+          (Number(String(b.price).replace(/[^0-9.]/g, "")) || 0) -
+          (Number(String(a.price).replace(/[^0-9.]/g, "")) || 0),
+      );
+    }
+  }
+
   const pages = Math.max(1, Math.ceil(filtered.length / perPage));
   const start = (page - 1) * perPage;
-  const pageItems = filtered.slice(start, start + perPage);
+  const pageItems = sorted.slice(start, start + perPage);
+
+  useEffect(() => {
+    setPage(1);
+  }, [
+    filters.search,
+    filters.categories,
+    filters.brands,
+    filters.maxPrice,
+    filters.inStockOnly,
+    filters.sort,
+  ]);
 
   return (
     <div>

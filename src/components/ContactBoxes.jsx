@@ -1,38 +1,46 @@
-import { FiHeadphones, FiPhone, FiMail, FiBriefcase } from "react-icons/fi";
+import { FiPhone, FiMail, FiClock } from "react-icons/fi";
+import { SlLocationPin } from "react-icons/sl";
 
 const ContactBoxes = () => {
   const boxes = [
     {
-      title: "الدعم الفني",
-      desc: "تكوين، استكشاف الأخطاء والمساعدة في الموقع.",
-      contact: "+249 183 777 100",
-      icon: <FiHeadphones />,
+      title: "العنوان",
+      contact: "الخرطوم، السودان",
+      desc: "شارع النيل، مبنى سوداتل الرئيسي",
+      icon: <SlLocationPin />,
     },
     {
-      title: "استفسارات المبيعات",
-      desc: "عروض خاصة، طلبات بالجملة وتسعير المشاريع.",
-      contact: "sales@sudatel.com",
+      title: "الهاتف",
+      contact: "+249 183 777 100",
       icon: <FiPhone />,
     },
     {
-      title: "شراكات الشركات",
-      desc: "اتفاقيات إطار، تصاريح شراكة وتسويق مشترك.",
-      contact: "partners@sudatel.com",
-      icon: <FiBriefcase />,
+      title: "البريد الإلكتروني",
+      contact: "info@sudatel.com",
+      icon: <FiMail />,
+    },
+    {
+      title: "ساعات العمل",
+      contact: "من الأحد إلى الخميس: 8 صباحًا - 5 مساءً",
+      icon: <FiClock />,
     },
   ];
 
   return (
-    <div className="grid md:grid-cols-3 gap-6">
+    <div className="flex flex-col gap-6">
       {boxes.map((b, i) => (
         <div
           key={i}
-          className="p-6 bg-white rounded-2xl shadow flex flex-col gap-3"
+          className="p-3 bg-white rounded-2xl flex gap-3 border border-slate-300"
         >
-          <div className="text-(--main-color) text-2xl">{b.icon}</div>
-          <h4 className="font-semibold">{b.title}</h4>
-          <p className="text-(--text-color)">{b.desc}</p>
-          <p className="mt-2 font-medium">{b.contact}</p>
+          <div className="text-(--gr-color) text-xl h-11 w-11 flex items-center justify-center bg-(--gr-color)/10 rounded-2xl">
+            {b.icon}
+          </div>
+          <div>
+            <h4 className="font-semibold text-(--text-color)">{b.title}</h4>
+            <p className="text-(--text-color)">{b.desc}</p>
+            <p className="mt-2 font-normal">{b.contact}</p>
+          </div>
         </div>
       ))}
     </div>

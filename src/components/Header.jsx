@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 ">
       {/* Offer Section */}
-      <div className="container py-3 flex justify-between items-center relative">
+      <div className="container py-2 flex justify-between items-center relative">
         <div className="flex items-center gap-2">
           <div className="flex justify-center items-center text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) h-9 w-9 rounded-2xl shadow-lg shadow-(--main-color)">
             <TiWiFi className="text-lg" />
@@ -39,7 +39,7 @@ const Header = () => {
         </div>
         <ul className="hidden md:flex space-x-6">
           {links.map((link) => (
-            <div className="flex flex-col items-center gap-3" key={link.name}>
+            <div className="flex flex-col items-center gap-1" key={link.name}>
               <NavLink
                 key={link.name}
                 to={link.path}
