@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+:root {
+  --main-color: #00368c;
+  --color-secondary: #fbbf24;
+  --color-background: #f3f7fc;
+  --text-color: #5a6472;
+  --gr-color: #52abf7;
+}
+
+body {
+  font-family: "Changa", sans-serif;
+}
+
+.container {
+  @apply mx-auto px-3 md:px-0;
+}
+.main-btn {
+  @apply flex items-center justify-center py-2 px-4 gap-1 text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) rounded-xl transition-colors duration-300;
+}
