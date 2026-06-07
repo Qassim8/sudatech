@@ -1,10 +1,11 @@
 import { useState, useMemo, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import sampleProducts from "../data/sampleProducts";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 const ShopGrid = ({ filters = {} }) => {
   const [page, setPage] = useState(1);
-  const perPage = 6;
+  const perPage = 9;
 
   // create a larger dataset by repeating sample products
   const products = useMemo(() => {
@@ -98,21 +99,21 @@ const ShopGrid = ({ filters = {} }) => {
         <button
           disabled={page === 1}
           onClick={() => setPage((s) => Math.max(1, s - 1))}
-          className="px-3 py-2 bg-white border rounded"
+          className="px-3 py-2 bg-white border border-slate-300 rounded-2xl cursor-pointer shadow"
         >
-          السابق
+          <FiArrowRight />
         </button>
 
-        <div className="px-4 py-2 bg-white border rounded">
+        <div className="px-4 py-2">
           {page} / {pages}
         </div>
 
         <button
           disabled={page === pages}
           onClick={() => setPage((s) => Math.min(pages, s + 1))}
-          className="px-3 py-2 bg-white border rounded"
+          className="px-3 py-2 bg-white border border-slate-300 rounded-2xl cursor-pointer shadow"
         >
-          التالي
+          <FiArrowLeft />
         </button>
       </div>
     </div>

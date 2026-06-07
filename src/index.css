@@ -16,5 +16,5 @@ body {
   @apply mx-auto px-3 md:px-0;
 }
 .main-btn {
-  @apply flex items-center justify-center py-2 px-4 gap-1 text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) rounded-xl transition-colors duration-300;
+  @apply flex items-center justify-center py-2 px-4 gap-1 text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) rounded-xl transition-colors duration-300 cursor-pointer hover:bg-linear-to-bl hover:from-blue-700 hover:to-blue-950;
 }
