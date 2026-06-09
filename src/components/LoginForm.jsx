@@ -17,7 +17,7 @@ const LoginForm = () => {
         <form onSubmit={submit} className="space-y-4 md:max-w-2xl">
           <div className="flex flex-col gap-7">
             <div>
-              <label className="block text-sm mb-1">الايميل</label>
+              <label className="block text-sm mb-1">البريد الالكتروني</label>
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

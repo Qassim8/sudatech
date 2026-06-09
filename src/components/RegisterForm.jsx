@@ -29,7 +29,7 @@ const RegisterForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm mb-1">الايميل</label>
+            <label className="block text-sm mb-1">البريد الالكتروني</label>
             <input
               value={email}
               placeholder="example@gmail.com"
