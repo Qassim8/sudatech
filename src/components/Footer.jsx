@@ -13,7 +13,7 @@ import { TiWiFi } from "react-icons/ti";
 const Footer = () => {
   return (
     <footer className="bg-(--color-background) border-t border-slate-200 mt-12">
-      <div className="container py-10 grid grid-cols-1 md:grid-cols-5 gap-6 border-b border-slate-200">
+      <div className="container py-10 grid grid-cols-1 md:grid-cols-4 gap-6 border-b border-slate-200">
         <div>
           <div className="flex items-center gap-2 mb-5">
             <div className="flex justify-center items-center text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) h-9 w-9 rounded-2xl shadow-lg shadow-(--main-color)">
@@ -47,6 +47,28 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
+        <div>
+          <h5 className="font-semibold mb-5">روابط</h5>
+          <ul className="text-sm text-(--text-color) space-y-2">
+            <li>
+              <Link to="/" className="hover:text-(--gr-color)">
+                الرئيسية
+              </Link>
+            </li>
+            <li>
+              <Link to="/shop" className="hover:text-(--gr-color)">
+                المتجر
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-(--gr-color)">
+                تواصل معنا
+              </Link>
+            </li>
+          </ul>
+        </div>
+
         <div>
           <h5 className="font-semibold mb-5">المتجر</h5>
           <ul className="text-sm text-(--text-color) space-y-2">
@@ -77,26 +99,6 @@ const Footer = () => {
         </div>
 
         <div>
-          <h5 className="font-semibold mb-5">روابط</h5>
-          <ul className="text-sm text-(--text-color) space-y-2">
-            <li>
-              <Link to="/" className="hover:text-(--gr-color)">
-                الرئيسية
-              </Link>
-            </li>
-            <li>
-              <Link to="/shop" className="hover:text-(--gr-color)">
-                المتجر
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:text-(--gr-color)">
-                تواصل معنا
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
           <h5 className="font-semibold mb-5">تواصل</h5>
           <ul className=" text-sm text-(--text-color) space-y-2">
             <li className="flex items-center gap-2">
@@ -110,21 +112,6 @@ const Footer = () => {
               السعودية
             </li>
           </ul>
-        </div>
-        <div>
-          <h5 className="font-semibold">اشترك</h5>
-          <p className="text-sm text-(--text-color) mt-2">
-            ارسل بريدك للاطلاع على العروض الخاصة.
-          </p>
-          <div className="mt-3 flex gap-2">
-            <input
-              className="flex-1 border border-slate-200 rounded-lg py-2 px-3"
-              placeholder="بريدك الالكتروني"
-            />
-            <button className="bg-linear-to-bl from-(--main-color) to-(--gr-color) text-white py-2 px-4 rounded-lg">
-              اشترك
-            </button>
-          </div>
         </div>
       </div>
       <div className="text-center py-5 text-sm text-(--text-color)">

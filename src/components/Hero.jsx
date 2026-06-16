@@ -53,23 +53,23 @@ const Hero = () => {
             alt="Hero Image"
             className="w-full h-auto object-cover scale-105 hover:scale-110 transition-transform duration-700"
           />
-          <div className="z-20 absolute backdrop-blur-md top-3 left-3 right-3 flex items-center justify-between p-4 border border-white/20 rounded-xl">
+          <div className="z-20 absolute backdrop-blur-md bottom-3 left-3 right-3 flex items-center justify-between p-4 border border-white/20 rounded-xl">
             <div className="flex items-center gap-2">
               <div className="flex justify-center items-center text-white bg-(--gr-color) h-9 w-9 rounded-xl shadow-lg shadow-(--main-color)">
                 <MdOutlineElectricBolt className="text-lg" />
               </div>
               <div>
                 <p className="font-bold text-xs text-slate-400 tracking-widest grow">
-                  احدث العروض
+                  اليك
                 </p>
-                <p className="text-lg text-white leading-tight">Wi-Fi 6</p>
+                <p className="text-lg text-white leading-tight">احدث العروض</p>
               </div>
             </div>
             <Link
               to="/products"
               className="text-white font-bold transition-colors duration-300 text-xs py-2 px-4 bg-white/10 hover:bg-white/20 rounded-lg"
             >
-              اكتشف
+              اكتشف الان
             </Link>
           </div>
         </div>

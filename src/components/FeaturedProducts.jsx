@@ -12,7 +12,7 @@ const FeaturedProducts = () => {
       <div className="container">
         <div className="flex items-center justify-between mb-6">
           <MainTitle
-            pos="start"
+            pos="text-start"
             title="منتجات مميزة"
             subtitle="اختياراتنا لك"
             description="أفضل المنتجات المختارة بعناية لتضمن جودة وأداء متميزين."

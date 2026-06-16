@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FiPlus, FiMinus, FiTrash2 } from "react-icons/fi";
+import CartItem from "../../components/CartItem";
 
 const readCart = () => {
   try {
@@ -54,67 +55,56 @@ const Cart = () => {
           </p>
         </div>
       ) : (
-        <div className="mt-6 grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bg-white rounded-2xl shadow p-6 space-y-4">
-            {items.map((it) => (
-              <div
-                key={it.id}
-                className="flex items-center gap-4 border-b pb-4"
-              >
-                <img
-                  src={it.image}
-                  alt={it.name}
-                  className="w-24 h-24 object-contain bg-white rounded"
-                />
-                <div className="grow">
-                  <div className="font-semibold">{it.name}</div>
-                  <div className="text-sm text-slate-500">{it.price} USD</div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => updateQty(it.id, (it.qty || 1) - 1)}
-                    className="p-2 border rounded"
-                  >
-                    <FiMinus />
-                  </button>
-                  <div className="px-4">{it.qty}</div>
-                  <button
-                    onClick={() => updateQty(it.id, (it.qty || 1) + 1)}
-                    className="p-2 border rounded"
-                  >
-                    <FiPlus />
-                  </button>
-                </div>
-
-                <div className="w-28 text-right font-semibold">
-                  $
-                  {(
-                    (Number(String(it.price).replace(/[^0-9.]/g, "")) || 0) *
-                    (it.qty || 1)
-                  ).toFixed(2)}
-                </div>
-
-                <button
-                  onClick={() => remove(it.id)}
-                  className="p-2 text-red-600"
-                >
-                  <FiTrash2 />
-                </button>
-              </div>
+        <div className="mt-6 grid md:grid-cols-2 gap-6 relative">
+          <div className="space-y-4">
+            {[1, 1, 1, 1, 1, 1].map(() => (
+              <CartItem />
             ))}
           </div>
 
-          <aside className="bg-white rounded-2xl shadow p-6">
-            <div className="text-sm text-slate-500">ملخص الطلب</div>
+          <aside className="border border-slate-300 rounded-2xl p-6 sticky top-18 h-fit">
+            <div className="text-2xl font-bold">ملخص الطلب</div>
+
+            <div className="mt-4 space-y-2.5">
+              <h2 className="my-2 text-lg font-bold">معلومات الشحن</h2>
+              <div className="flex justify-between">
+                <h3 className="">الولاية</h3>
+                <select
+                  name=""
+                  id=""
+                  className="border border-slate-500 p-2 rounded-xl"
+                >
+                  <option value="">الخرطوم</option>
+                  <option value="">بحري</option>
+                  <option value="">امدرمان</option>
+                  <option value="">الجزيرة</option>
+                  <option value="">مدني</option>
+                  <option value="">الحصاحيصا</option>
+                  <option value="">بورتسودان</option>
+                </select>
+              </div>
+              <div className="flex justify-between">
+                <h3>المدة حتى الاستلام</h3>
+                <p>24 ساعة</p>
+              </div>
+              <div className="flex justify-between">
+                <h3>رسوم الشحن</h3>
+                <p>10000 ج.س</p>
+              </div>
+            </div>
             <div className="mt-4 flex justify-between">
-              <div>المجموع الفرعي</div>
-              <div className="font-semibold">${subtotal.toFixed(2)}</div>
+              <div className="text-lg font-bold">المجموع الفرعي</div>
+              <div className="font-semibold">{subtotal.toFixed(2)} ج.س</div>
+            </div>
+
+            <div className="mt-5 pt-2 border-t border-t-slate-300 flex justify-between">
+              <div className="text-xl font-bold">المجموع الاجمالي</div>
+              <div className="font-bold">7000 ج.س</div>
             </div>
 
             <div className="mt-6">
-              <button className="w-full py-3 bg-(--main-color) text-white rounded">
-                متابعة الدفع
+              <button className="w-full text-base md:text-xl py-3 bg-(--main-color)/80 text-white rounded-2xl cursor-pointer transition-colors duration-300 hover:bg-(--main-color)">
+                تأكيد الطلب
               </button>
             </div>
           </aside>

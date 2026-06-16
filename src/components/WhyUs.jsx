@@ -36,8 +36,8 @@ const WhyUs = () => {
           title="لماذا نحن"
           subtitle="ثقتنا وخبرتنا في كل منتج"
           description="نحن نقدم أفضل الخدمة والمنتجات في مجال الشبكات"
-          pos="center"
-          margin="auto"
+          pos="text-center"
+          margin="mx-auto"
         />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-5">
           {features.map((f) => (

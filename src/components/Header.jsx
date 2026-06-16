@@ -1,27 +1,33 @@
 import SearchBar from "./SearchBar";
-import { NavLink, useLocation } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { BiSearch } from "react-icons/bi";
 import { TiWiFi } from "react-icons/ti";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { GoSignIn } from "react-icons/go";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
 import { LuShoppingCart } from "react-icons/lu";
+import CartMenu from "./CartMenu";
+import { GrOrderedList } from "react-icons/gr";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [showCart, setShowCart] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const path = useLocation().pathname;
 
   const links = [
     { name: "الرئيسية", path: "/" },
     { name: "المتجر", path: "/shop" },
+    { name: "المفضلة", path: "/wishlist" },
+    { name: "طلباتي", path: "/orders" },
     { name: "من نحن", path: "/about" },
     { name: "تواصل معنا", path: "/contact" },
   ];
 
+  const closeCart = () => setShowCart(false);
+
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 ">
+    <nav className="bg-white shadow-md sticky top-0 z-30 ">
       {/* Offer Section */}
       <div className="container py-2 flex justify-between items-center relative">
         <div className="flex items-center gap-2">
@@ -68,7 +74,7 @@ const Header = () => {
               <FiMenu className="text-2xl" />
             )}
           </button>
-          <div className="relative">
+          <div className="relative" onClick={() => setShowCart(true)}>
             <LuShoppingCart className="text-2xl text-(--text-color) hover:text-(--hover-color) transition-colors duration-300 cursor-pointer" />
             <span className="absolute -top-3 -right-3 bg-(--gr-color) text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">
               0
@@ -122,6 +128,8 @@ const Header = () => {
           </div>
         </div>
       )}
+
+      <CartMenu show={showCart} hide={closeCart} />
     </nav>
   );
 };

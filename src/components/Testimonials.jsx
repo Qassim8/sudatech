@@ -30,8 +30,8 @@ const Testimonials = () => {
           title="آراء العملاء"
           subtitle="تجارب عملائنا معنا"
           description="نحن فخورون بثقة عملائنا الكرام، إليك بعض من آرائهم وتجاربهم معنا في تقديم أفضل خدمات ومعدات الشبكات."
-          pos="center"
-          margin="auto"
+          pos="text-center"
+          margin="mx-auto"
         />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t) => (

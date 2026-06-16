@@ -4,7 +4,7 @@ const CTABox = () => {
   return (
     <section className="py-16 bg-white">
       <div className="container">
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/40 bg-linear-to-r from-blue-900 to-blue-950 text-white py-20 px-14 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/40 bg-linear-to-r from-blue-900 to-blue-950 text-white py-10 md:py-20 px-5 md:px-14 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="absolute -top-50 -left-30 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl z-0" />
           <div className="absolute -bottom-30 right-1/2 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl z-0" />
 

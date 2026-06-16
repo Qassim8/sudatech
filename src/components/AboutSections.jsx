@@ -6,7 +6,11 @@ const AboutSections = () => {
       <div className="flex flex-col md:flex-row gap-5 md:gap-10">
         <div className="flex-1">
           {/* 1 - نبذة عن الشركة */}
-          <MainTitle pos="start" title="من نحن" subtitle="سوداتل في لمحة" />
+          <MainTitle
+            pos="text-start"
+            title="من نحن"
+            subtitle="سوداتل في لمحة"
+          />
           <p className="text-(--text-color)">
             سوداتل تقدم حلول اتصالات متكاملة للشركات والمؤسسات والأفراد. نمتلك
             خبرة طويلة في تصميم ونشر شبكات الاتصالات وتزويد الأجهزة والخدمات ذات

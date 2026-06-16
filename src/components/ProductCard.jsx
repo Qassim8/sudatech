@@ -1,9 +1,14 @@
+import { BsHeart } from "react-icons/bs";
 import { FiEye, FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router";
 
 const ProductCard = ({ product = {} }) => {
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100">
+    <div className="group relative h-115 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100">
+      <div className="absolute top-2 left-2 w-fit p-2 rounded-full bg-slate-100 text-(--text-color) cursor-pointer hover:bg-slate-200 transition-colors duration-300 z-10">
+        <BsHeart />
+      </div>
+
       {/* Image Section */}
       <div className="relative h-60 overflow-hidden">
         {/* Badge */}
@@ -33,40 +38,45 @@ const ProductCard = ({ product = {} }) => {
               {product?.brand}
             </p>
           </div>
-          <Link className="w-fit p-2 rounded-full bg-slate-100 text-(--text-color) hover:bg-slate-200 transition-colors duration-300">
+
+          <Link
+            to={`/product/${product.id}`}
+            className="w-fit p-2 rounded-full bg-slate-100 text-(--text-color) hover:bg-slate-200 transition-colors duration-300"
+          >
             <FiEye />
           </Link>
         </div>
 
-        {/* Title */}
-        <h3 className="text-xl font-semibold text-slate-800 line-clamp-2 mt-3">
-          {product?.name}
-        </h3>
+        <div className="flex justify-between items-center">
+          {/* Title */}
+          <h3 className="text-xl font-semibold text-slate-800 line-clamp-2 mt-2">
+            {product?.name}
+          </h3>
+        </div>
 
-        <p className="text-sm text-(--text-color) py-4">
+        <p className="text-sm text-(--text-color) py-2">
           {product?.description}
         </p>
+      </div>
+      <div className="flex items-center gap-5 absolute left-1/2 -translate-x-1/2 bottom-4 w-[90%] h-10">
+        {/* Price */}
+        <div className="grow flex items-center gap-2 pt-1">
+          <span className="text-base md:text-xl font-medium text-emerald-700">
+            {product?.price} <span className="text-xs"> ج.س</span>
+          </span>
 
-        <div className="flex items-center gap-5">
-          {/* Price */}
-          <div className="grow flex items-center gap-2 pt-1">
-            <span className="text-lg font-medium text-emerald-700">
-              {product?.price} ج.س
+          {product?.oldPrice && (
+            <span className="text-sm text-slate-400 line-through">
+              ${product?.oldPrice}
             </span>
-
-            {product?.oldPrice && (
-              <span className="text-sm text-slate-400 line-through">
-                ${product?.oldPrice}
-              </span>
-            )}
-          </div>
-
-          {/* Add to cart */}
-          <button className="flex items-center justify-center py-2 px-4 gap-2 text-white bg-(--main-color) rounded-xl transition-colors duration-300 cursor-pointer">
-            اضف للسلة
-            <FiShoppingCart />
-          </button>
+          )}
         </div>
+
+        {/* Add to cart */}
+        <button className="text-xs md:text-sm flex items-center justify-center py-2 px-4 gap-2 text-white bg-(--main-color) rounded-xl transition-colors duration-300 cursor-pointer">
+          اضف للسلة
+          <FiShoppingCart />
+        </button>
       </div>
     </div>
   );
