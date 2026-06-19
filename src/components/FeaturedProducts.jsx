@@ -3,9 +3,12 @@ import ProductCard from "./ProductCard";
 import sampleProducts from "../data/sampleProducts";
 import { Link } from "react-router";
 import { GoArrowLeft } from "react-icons/go";
+import useProducts from "../hooks/useProducts";
 
 const FeaturedProducts = () => {
-  const products = sampleProducts.slice(0, 4);
+  // const products = sampleProducts.slice(0, 4);
+
+  const { products } = useProducts();
 
   return (
     <section className="py-16 bg-(--color-background)">
@@ -26,8 +29,8 @@ const FeaturedProducts = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-6">
-          {products.map((p) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 mt-6">
+          {products?.slice(0, 4).map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>

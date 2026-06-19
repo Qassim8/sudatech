@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { loginProcess } = useAuth();
 
   const submit = (e) => {
     e.preventDefault();
-    alert("تم تسجيل الدخول مؤقتاً");
+    loginProcess.login({ identifier: email, password });
   };
   return (
     <div>

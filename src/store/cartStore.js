@@ -25,18 +25,28 @@ export const cartStore = create(
       set((state) => {
         const inCart = state.cartItems?.find((c) => c.id === product.id);
 
-        if (inCart) {
+        if (inCart && inCart.quantity <= 1) {
+          return {
+            cartItems: state.cartItems?.filter((p) => p.id !== product.id),
+          };
+        } else {
           return {
             cartItems: state.cartItems?.map((p) =>
               p.id === product.id ? { ...p, quantity: p.quantity - 1 } : p,
             ),
           };
-        } else {
-          return {
-            cartItems: state.cartItems?.filter((p) => p.id !== product.id),
-          };
         }
       }),
+    removeItem: (itemId) =>
+      set((state) => ({
+        cartItems: state.cartItems?.filter((item) => item.id !== itemId),
+      })),
+    cartTotal: () =>
+      set((state) => ({
+        cartTotal: state.cartItems?.reduce((acc, curr) => {
+          return acc + curr;
+        }),
+      })),
     clearCart: () => set({ cartItems: [] }),
   })),
   { name: "cartList" },

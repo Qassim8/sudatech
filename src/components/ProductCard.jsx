@@ -1,28 +1,24 @@
 import { BsHeart } from "react-icons/bs";
 import { FiEye, FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router";
+import { cartStore } from "../store/cartStore";
 
-const ProductCard = ({ product = {} }) => {
+const ProductCard = ({ product }) => {
+  const addCart = cartStore((state) => state.addCart);
+
   return (
-    <div className="group relative h-115 bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100">
+    <div className="group relative p-3 bg-white rounded-2xl overflow-hidden md:shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 md:border-slate-100">
       <div className="absolute top-2 left-2 w-fit p-2 rounded-full bg-slate-100 text-(--text-color) cursor-pointer hover:bg-slate-200 transition-colors duration-300 z-10">
         <BsHeart />
       </div>
 
       {/* Image Section */}
-      <div className="relative h-60 overflow-hidden">
-        {/* Badge */}
-        {product?.badge && (
-          <span className="absolute top-3 left-3 z-10 bg-slate-900 text-white text-xs px-3 py-1 rounded-full">
-            {product.badge}
-          </span>
-        )}
-
+      <div className="relative h-32 md:h-60">
         {/* Image */}
         <img
-          src={product?.image}
+          src={`http://localhost:1337${product?.thumbnail?.url}`}
           alt={product?.title}
-          className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-500"
+          className="max-h-full w-full group-hover:scale-105 transition-transform duration-500"
         />
 
         {/* Hover overlay */}
@@ -30,35 +26,33 @@ const ProductCard = ({ product = {} }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-2">
+      <div className="space-y-2">
         <div className="flex justify-between items-center">
           <div className="w-fit py-1 px-2 rounded-lg bg-slate-100">
             {/* Brand */}
             <p className="text-xs text-slate-500 uppercase tracking-wide">
-              {product?.brand}
+              {product?.brand?.name}
             </p>
           </div>
 
           <Link
-            to={`/product/${product.id}`}
+            to={`/product/${product.documentId}`}
             className="w-fit p-2 rounded-full bg-slate-100 text-(--text-color) hover:bg-slate-200 transition-colors duration-300"
           >
-            <FiEye />
+            <FiEye className="text-xs md:text-base" />
           </Link>
         </div>
 
-        <div className="flex justify-between items-center">
-          {/* Title */}
-          <h3 className="text-xl font-semibold text-slate-800 line-clamp-2 mt-2">
-            {product?.name}
-          </h3>
-        </div>
+        {/* Title */}
+        <h3 className="text-sm md:text-base font-semibold text-slate-800 line-clamp-2 mt-2">
+          {product?.title}
+        </h3>
 
-        <p className="text-sm text-(--text-color) py-2">
-          {product?.description}
+        <p className="text-sm text-(--text-color) py-2 hidden md:block">
+          {product?.description?.slice(0, 65)}....
         </p>
       </div>
-      <div className="flex items-center gap-5 absolute left-1/2 -translate-x-1/2 bottom-4 w-[90%] h-10">
+      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-5">
         {/* Price */}
         <div className="grow flex items-center gap-2 pt-1">
           <span className="text-base md:text-xl font-medium text-emerald-700">
@@ -73,7 +67,11 @@ const ProductCard = ({ product = {} }) => {
         </div>
 
         {/* Add to cart */}
-        <button className="text-xs md:text-sm flex items-center justify-center py-2 px-4 gap-2 text-white bg-(--main-color) rounded-xl transition-colors duration-300 cursor-pointer">
+        <button
+          className="text-xs md:text-sm flex items-center justify-center py-2 px-4
+         gap-2 text-white bg-(--main-color) rounded-xl transition-colors duration-300 cursor-pointer"
+          onClick={() => addCart(product)}
+        >
           اضف للسلة
           <FiShoppingCart />
         </button>

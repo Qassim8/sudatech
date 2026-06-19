@@ -7,13 +7,14 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
 import { LuShoppingCart } from "react-icons/lu";
 import CartMenu from "./CartMenu";
-import { GrOrderedList } from "react-icons/gr";
+import { cartStore } from "../store/cartStore";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const path = useLocation().pathname;
+  const cartItems = cartStore((state) => state.cartItems);
 
   const links = [
     { name: "الرئيسية", path: "/" },
@@ -77,7 +78,7 @@ const Header = () => {
           <div className="relative" onClick={() => setShowCart(true)}>
             <LuShoppingCart className="text-2xl text-(--text-color) hover:text-(--hover-color) transition-colors duration-300 cursor-pointer" />
             <span className="absolute -top-3 -right-3 bg-(--gr-color) text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center">
-              0
+              {cartItems?.length || 0}
             </span>
           </div>
           <BiSearch
@@ -85,10 +86,13 @@ const Header = () => {
             onClick={() => setOpen(!open)}
           />
 
-          <button className="hidden md:flex items-center justify-center py-2 px-4 gap-1 text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) rounded-xl transition-colors duration-300">
+          <Link
+            to={"/login"}
+            className="hidden md:flex items-center justify-center py-2 px-4 gap-1 text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) rounded-xl transition-colors duration-300"
+          >
             <span className="hidden md:inline">تسجيل الدخول</span>
             <GoSignIn className="text-xl" />
-          </button>
+          </Link>
         </div>
       </div>
       {open && (
@@ -121,10 +125,10 @@ const Header = () => {
                 </div>
               ))}
             </ul>
-            <button className="main-btn">
+            <Link to={"/login"} className="main-btn">
               <span className="">تسجيل الدخول</span>
               <GoSignIn className="text-xl" />
-            </button>
+            </Link>
           </div>
         </div>
       )}

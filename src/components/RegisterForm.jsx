@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import useAuth from "../hooks/useAuth";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const { registerProcess } = useAuth();
 
   const submit = (e) => {
     e.preventDefault();
-    alert("تم إنشاء الحساب تجريبياً");
+    registerProcess.register({ username: name, email, password });
   };
 
   return (
@@ -66,7 +68,9 @@ const RegisterForm = () => {
             سجّل دخول
           </Link>
         </div>
-        <button className="main-btn py-3! w-full">انشاء حساب</button>
+        <button className={`main-btn py-3! w-full`}>
+          {registerProcess.registerPending ? "جار الحفظ...." : "انشاء حساب"}
+        </button>
       </form>
     </div>
   );

@@ -1,48 +1,20 @@
 import { Link, useParams } from "react-router";
-import { useState } from "react";
 import { FiArrowLeft, FiMinus, FiPlus, FiShoppingCart } from "react-icons/fi";
-import sampleProducts from "../../../data/sampleProducts";
 import { BsHeart } from "react-icons/bs";
 import ProductCard from "../../../components/ProductCard";
-
-const saveCart = (cart) => localStorage.setItem("cart", JSON.stringify(cart));
-const readCart = () => {
-  try {
-    return JSON.parse(localStorage.getItem("cart")) || [];
-  } catch {
-    return [];
-  }
-};
+import useProducts from "../../../hooks/useProducts";
+import { useState } from "react";
+import { FaAngleLeft } from "react-icons/fa6";
+import { RiArrowLeftSLine } from "react-icons/ri";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const product =
-    sampleProducts.find((p) => String(p.id) === String(id)) ||
-    sampleProducts[0];
-  const [qty, setQty] = useState(1);
-  const [mainImage, setMainImage] = useState(product.image);
+  const { singleProduct: product, products } = useProducts({ productId: id });
+  const [imageUrl, setImageUrl] = useState(null);
 
-  const addToCart = () => {
-    const cart = readCart();
-    const existing = cart.find((c) => String(c.id) === String(product.id));
-    if (existing) {
-      existing.qty = (existing.qty || 0) + qty;
-    } else {
-      cart.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        qty,
-      });
-    }
-    saveCart(cart);
-    window.dispatchEvent(new Event("cart:updated"));
-    alert("تمت الإضافة إلى السلة");
-  };
+  console.log(product);
 
   // sample thumbnails (reusing same image)
-  const thumbs = [product.image, product.image, product.image, product.image];
 
   return (
     <main>
@@ -51,35 +23,39 @@ const ProductDetail = () => {
           <Link to="/" className="">
             الرئيسية
           </Link>
-          <FiArrowLeft />
+          <RiArrowLeftSLine />
           <Link to="/shop" className="">
             المنتجات
           </Link>
-          <FiArrowLeft />
-          <span>{product.name}</span>
+          <RiArrowLeftSLine />
+          <span>{product?.title}</span>
         </div>
       </section>
       <section className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Left: images */}
           <div>
-            <div className="bg-white p-6 rounded-2xl shadow">
+            <div className="bg-white h-60 md:h-96 rounded-2xl shadow">
               <img
-                src={mainImage}
-                alt={product.name}
-                className="w-full h-84 object-contain rounded"
+                src={`http://localhost:1337${imageUrl ? imageUrl : product?.thumbnail?.url}`}
+                alt={product?.title}
+                className="w-full max-h-full object-contain"
               />
             </div>
 
             <div className="mt-5 flex gap-5">
-              {thumbs.map((t, i) => (
-                <button
-                  key={i}
-                  onClick={() => setMainImage(t)}
-                  className="flex-1 h-32 rounded-lg overflow-hidden border border-slate-300"
+              {product?.images?.map(({ documentId, url, name }) => (
+                <div
+                  className={`grow flex justify-center items-center h-16 md:h-28 border border-slate-300 rounded-lg cursor-pointer ${imageUrl === url ? "ring ring-(--gr-color) shadow" : ""}`}
+                  onClick={() => setImageUrl(url)}
+                  key={documentId}
                 >
-                  <img src={t} className="w-full h-full object-contain" />
-                </button>
+                  <img
+                    src={`http://localhost:1337${url}`}
+                    alt={name}
+                    className="max-w-full max-h-full"
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -87,20 +63,30 @@ const ProductDetail = () => {
           {/* Right: details */}
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <span className="text-xs bg-sky-100 text-(--gr-color) px-2 py-1 rounded">
-                NETWORKING
+              <span className="text-sm md:text-lg bg-sky-100 text-(--gr-color) px-2 py-1 rounded">
+                {product?.brand?.name}
               </span>
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-(--main-color)">
-              {product.name}
+            <h1 className="text-xl md:text-4xl font-bold text-(--main-color)">
+              {product?.title}
             </h1>
 
-            <div className="mt-6">
-              <div className="text-3xl font-bold text-emerald-700">
-                {product.price}
+            <div className="mt-4">
+              <div className="text-2xl md:text-3xl font-bold text-emerald-700">
+                {product?.price}
                 <span className="text-sm"> ج.س </span>
               </div>
+            </div>
+
+            <div className="md:hidden flex justify-between items-center border border-slate-300 mt-3 rounded-full overflow-hidden">
+              <button className="p-4 cursor-pointer">
+                <FiMinus className="text-(--text-color)" />
+              </button>
+              <div className="px-6">{product?.quantity || 0}</div>
+              <button className="p-4 cursor-pointer">
+                <FiPlus className="text-(--text-color)" />
+              </button>
             </div>
 
             <div className="mt-6 flex items-center gap-4">
@@ -108,34 +94,27 @@ const ProductDetail = () => {
                 <BsHeart className="text-xl" />
               </div>
 
-              <div className="flex items-center border border-slate-300 rounded-full overflow-hidden">
-                <button
-                  onClick={() => setQty((q) => Math.max(1, q - 1))}
-                  className="p-4 cursor-pointer"
-                >
+              <div className="hidden md:flex items-center border border-slate-300 rounded-full overflow-hidden">
+                <button className="p-4 cursor-pointer">
                   <FiMinus className="text-(--text-color)" />
                 </button>
-                <div className="px-6">{qty}</div>
-                <button
-                  onClick={() => setQty((q) => q + 1)}
-                  className="p-4 cursor-pointer"
-                >
+                <div className="px-6">{product?.quantity || 0}</div>
+                <button className="p-4 cursor-pointer">
                   <FiPlus className="text-(--text-color)" />
                 </button>
               </div>
 
-              <button
-                onClick={addToCart}
-                className="flex items-center gap-2 px-6 py-3 bg-(--main-color) text-white rounded-2xl"
-              >
+              <button className="grow md:grow-0 flex items-center justify-center gap-2 px-6 py-3 bg-(--main-color) text-white rounded-2xl">
                 <FiShoppingCart /> إضافة إلى السلة
               </button>
             </div>
 
-            <p className="mt-6 text-(--text-color)">{product.description}</p>
+            <p className="mt-6 text-(--text-color)">{product?.description}</p>
 
-            <div className="mt-4 text-sm text-(--gr-color)">
-              متوفر في المخزن
+            <div
+              className={`mt-4 text-sm font-semibold ${product?.inStock ? "text-emerald-500" : "text-red-500"}`}
+            >
+              {product?.inStock ? " متوفر في المخزن" : "نفذت الكمية"}
             </div>
 
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -165,29 +144,26 @@ const ProductDetail = () => {
                   <div className="font-medium">الشحن: 50 ج.س</div>
                 </div>
               </div>
-
-              <div className="p-4 border border-slate-300 rounded-2xl flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-100 rounded flex items-center justify-center">
-                  ✓
-                </div>
-                <div>
-                  <div className="font-medium">Manufacturer warranty</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
         <section className="my-10 bg-(--color-background) p-3 rounded-2xl">
           <h3 className="text-xl font-semibold">نظرة عامة</h3>
-          <p className="text-sm text-slate-400">
-            الميزات التقنية الاساسية للمنتج
-          </p>
+          <p className=" text-slate-400">الميزات التقنية الاساسية للمنتج</p>
+          <div className="flex flex-col gap-2 my-5">
+            {product?.features?.map(({ id, name, value }) => (
+              <div key={id} className="flex items-center gap-3">
+                <h3 className="font-bold">{name}:</h3>
+                <p className="text-(--text-color)">{value}</p>
+              </div>
+            ))}
+          </div>
         </section>
         <section className="py-10">
           <h2 className="text-xl font-bold mb-10">منتجات ذات صلة</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {sampleProducts.slice(0, 4).map((p) => (
-              <ProductCard product={p} />
+            {products?.slice(0, 4).map((p) => (
+              <ProductCard product={p.id} />
             ))}
           </div>
         </section>

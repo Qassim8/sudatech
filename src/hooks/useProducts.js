@@ -2,36 +2,40 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { productStore } from "../store/productsStore";
 
-const useProducts = ({ productId }) => {
-  const { activeCategories } = productStore((set) => set.activeCategories);
+const useProducts = ({ productId } = {}) => {
+  const { activeCategories } = productStore((state) => state.activeCategories);
   const queryClient = useQueryClient();
 
-  const BASE_URL = ``;
+  const BASE_URL = `http://localhost:1337/api`;
 
   const { data: products, isLoading: productsLoad } = useQuery({
-    queryKey: ["products", activeCategories],
+    queryKey: ["products"],
     queryFn: async () => {
       // const endpoint = activeCategories ? activeCategories : "all";
 
       // const res = await axios.get(`${BASE_URL}/category=${endpoint}`);
 
-      const res = await axios.get(`${BASE_URL}/products`);
+      const { data } = await axios.get(`${BASE_URL}/products?populate=*`);
 
-      return res.data;
+      return data.data;
     },
+    staleTime: Infinity,
   });
 
   const { data: singleProduct, isLoading: singleProductLoading } = useQuery({
-    queryKey: ["product"],
+    queryKey: ["product", productId],
     queryFn: async () => {
-      const { data } = await axios.get(`${BASE_URL}/products/${productId}`);
-      return data;
+      const { data } = await axios.get(
+        `${BASE_URL}/products/${productId}?populate=*`,
+      );
+      return data.data;
     },
     enabled: !!productId,
+
     initialData: () => {
       return queryClient
         .getQueryData(["products"])
-        ?.find((p) => p.id === productId);
+        ?.find((p) => p.documentId === productId);
     },
   });
 

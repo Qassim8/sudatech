@@ -2,19 +2,21 @@ import { useState, useMemo, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import sampleProducts from "../data/sampleProducts";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import useProducts from "../hooks/useProducts";
 
 const ShopGrid = ({ filters = {} }) => {
   const [page, setPage] = useState(1);
   const perPage = 9;
+  const { products: allProducts } = useProducts();
 
   // create a larger dataset by repeating sample products
   const products = useMemo(() => {
     const list = [];
     for (let i = 0; i < 6; i++) {
-      sampleProducts.forEach((p) => list.push({ ...p, id: p.id + i * 10 }));
+      allProducts?.forEach((p) => list.push({ ...p, id: p.id + i * 10 }));
     }
     return list;
-  }, []);
+  }, [allProducts]);
 
   const filtered = products.filter((p) => {
     const q = (filters.search || "").toLowerCase();
@@ -89,7 +91,7 @@ const ShopGrid = ({ filters = {} }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6">
         {pageItems.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}

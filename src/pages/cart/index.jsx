@@ -1,54 +1,26 @@
-import { useEffect, useState } from "react";
-import { FiPlus, FiMinus, FiTrash2 } from "react-icons/fi";
 import CartItem from "../../components/CartItem";
-
-const readCart = () => {
-  try {
-    return JSON.parse(localStorage.getItem("cart")) || [];
-  } catch {
-    return [];
-  }
-};
-
-const saveCart = (cart) => localStorage.setItem("cart", JSON.stringify(cart));
+import { cartStore } from "../../store/cartStore";
 
 const Cart = () => {
-  const [items, setItems] = useState([]);
+  const cartItems = cartStore((state) => state.cartItems);
 
-  useEffect(() => {
-    const onUpdate = () => setItems(readCart());
-    window.addEventListener("cart:updated", onUpdate);
-    return () => window.removeEventListener("cart:updated", onUpdate);
-  }, []);
+  const subtotal = cartItems.reduce((acc, item) => {
+    const price =
+      typeof item.price === "string"
+        ? Number(item.price.replace(/[^0-9.-]+/g, ""))
+        : Number(item.price || 0);
+    const qty = item.quantity || 1;
+    return acc + price * qty;
+  }, 0);
 
-  const updateQty = (id, next) => {
-    const nextItems = items.map((it) =>
-      String(it.id) === String(id) ? { ...it, qty: Math.max(1, next) } : it,
-    );
-    setItems(nextItems);
-    saveCart(nextItems);
-    window.dispatchEvent(new Event("cart:updated"));
-  };
-
-  const remove = (id) => {
-    const nextItems = items.filter((it) => String(it.id) !== String(id));
-    setItems(nextItems);
-    saveCart(nextItems);
-    window.dispatchEvent(new Event("cart:updated"));
-  };
-
-  const subtotal = items.reduce(
-    (s, it) =>
-      s +
-      (Number(String(it.price).replace(/[^0-9.]/g, "")) || 0) * (it.qty || 1),
-    0,
-  );
+  const shippingFee = subtotal > 0 ? 10000 : 0;
+  const total = subtotal + shippingFee;
 
   return (
     <main className="container py-12">
       <h2 className="text-2xl font-bold text-(--main-color)">سلة المشتريات</h2>
 
-      {items.length === 1 ? (
+      {cartItems.length === 0 ? (
         <div className="mt-6 bg-white rounded-2xl shadow p-6">
           <p className="text-(--text-color)">
             السلة حاليا فارغة — أضف منتجات من المتجر.
@@ -57,8 +29,8 @@ const Cart = () => {
       ) : (
         <div className="mt-6 grid md:grid-cols-2 gap-6 relative">
           <div className="space-y-4">
-            {[1, 1, 1, 1, 1, 1].map(() => (
-              <CartItem />
+            {cartItems?.map((item) => (
+              <CartItem item={item} key={item.documentId} />
             ))}
           </div>
 
@@ -94,12 +66,20 @@ const Cart = () => {
             </div>
             <div className="mt-4 flex justify-between">
               <div className="text-lg font-bold">المجموع الفرعي</div>
-              <div className="font-semibold">{subtotal.toFixed(2)} ج.س</div>
+              <div className="font-semibold">
+                {subtotal.toLocaleString()} ج.س
+              </div>
             </div>
 
-            <div className="mt-5 pt-2 border-t border-t-slate-300 flex justify-between">
-              <div className="text-xl font-bold">المجموع الاجمالي</div>
-              <div className="font-bold">7000 ج.س</div>
+            <div className="mt-5 pt-2 border-t border-t-slate-300 space-y-2">
+              <div className="flex justify-between">
+                <div>رسوم الشحن</div>
+                <div>{shippingFee.toLocaleString()} ج.س</div>
+              </div>
+              <div className="flex justify-between font-bold text-xl">
+                <div>المجموع الاجمالي</div>
+                <div>{total.toLocaleString()} ج.س</div>
+              </div>
             </div>
 
             <div className="mt-6">

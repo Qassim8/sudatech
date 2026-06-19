@@ -3,28 +3,24 @@ import MainTitle from "./MainTitle";
 
 const features = [
   {
-    id: 1,
-    icon: <FiShield />,
-    title: "معدات معتمدة",
-    desc: "جميع الأجهزة أصلية، ومصدرها مباشرة من الموزعين المعتمدين مع ضمان كامل",
+    name: "معدات معتمدة",
+    value:
+      "جميع الأجهزة أصلية، ومصدرها مباشرة من الموزعين المعتمدين مع ضمان كامل",
   },
   {
-    id: 2,
-    icon: <FiTruck />,
-    title: "توصيل على مستوى الدولة",
-    desc: "شحن مجاني في اليوم التالي للطلبات التي تزيد قيمتها عن 200 دولار، مع دعم التركيب في جميع أنحاء المنطقة",
+    name: "توصيل على مستوى الدولة",
+    value:
+      "شحن مجاني في اليوم التالي للطلبات التي تزيد قيمتها عن 200 دولار، مع دعم التركيب في جميع أنحاء المنطقة",
   },
   {
-    id: 3,
-    icon: <FiClock />,
-    title: "دعم فني على مدار الساعة",
-    desc: "تحدث إلى مهندسي شبكات معتمدين في أي وقت - قبل البيع، أو أثناء التكوين، أو بعد البيع",
+    name: "دعم فني على مدار الساعة",
+    value:
+      "تحدث إلى مهندسي شبكات معتمدين في أي وقت - قبل البيع، أو أثناء التكوين، أو بعد البيع",
   },
   {
-    id: 4,
-    icon: <FiStar />,
-    title: "أسعار تنافسية",
-    desc: "نقدم أفضل الأسعار على معدات الشبكات عالية الجودة، مع خصومات خاصة للشركات والعملاء المتكررين",
+    name: "أسعار تنافسية",
+    value:
+      "نقدم أفضل الأسعار على معدات الشبكات عالية الجودة، مع خصومات خاصة للشركات والعملاء المتكررين",
   },
 ];
 
@@ -40,19 +36,19 @@ const WhyUs = () => {
           margin="mx-auto"
         />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-5">
-          {features.map((f) => (
+          {features.map((f, i) => (
             <div
-              key={f.id}
+              key={i}
               className="flex flex-col gap-4 items-start p-6 bg-white rounded-2xl border border-slate-200"
             >
-              <div className="p-3 rounded-lg bg-linear-to-bl from-(--main-color) to-(--gr-color) text-white text-2xl">
-                {f.icon}
+              <div className="w-12 h-12 rounded-lg bg-linear-to-bl from-(--main-color) to-(--gr-color) text-white text-2xl flex items-center justify-center">
+                <span className="font-bold">{i + 1}</span>
               </div>
               <div>
                 <h4 className="font-semibold text-lg text-slate-900">
-                  {f.title}
+                  {f.name}
                 </h4>
-                <p className="text-sm text-(--text-color) mt-2">{f.desc}</p>
+                <p className="text-sm text-(--text-color) mt-2">{f.value}</p>
               </div>
             </div>
           ))}

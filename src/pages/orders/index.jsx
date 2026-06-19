@@ -5,7 +5,7 @@ import sampleOrders from "../../data/sampleOrders";
 const Orders = () => {
   return (
     <div className="container py-6">
-      <main className="lg:col-span-3 grid md:grid-cols-2 gap-3">
+      <main className="lg:col-span-3 grid md:grid-cols-2 gap-5">
         {sampleOrders.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}

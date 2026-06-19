@@ -2,11 +2,11 @@ const sampleOrders = [
   {
     id: 1,
     number: "73262",
-    summary: "4 منتجات | بواسطة Alex John | 13:45، 10 نوفمبر 2025",
+    summary: { quantity: 4, date: "5/4/2026" },
     status: "Shipped",
     statusText: "تم الشحن إلى العميل",
     deliveryDate: "الجمعة، 13 نوفمبر 2025",
-    address: "الشارع الكبير، نيويورك بروكلين 5A، صندوق بريد: 212891",
+    address: "الخرطوم",
     total: "USD 340.00",
     items: [
       {
@@ -46,11 +46,11 @@ const sampleOrders = [
   {
     id: 2,
     number: "09177",
-    summary: "4 منتجات | بواسطة Alex John | 13:45، 10 نوفمبر 2025",
+    summary: { quantity: 3, date: "1/10/2026" },
     status: "Shipped",
     statusText: "تم الشحن إلى العميل",
     deliveryDate: "الجمعة، 13 نوفمبر 2025",
-    address: "الشارع الكبير، نيويورك بروكلين 5A، صندوق بريد: 212891",
+    address: "بحري",
     total: "USD 461.99",
     items: [
       {
@@ -82,11 +82,11 @@ const sampleOrders = [
   {
     id: 3,
     number: "77110",
-    summary: "4 منتجات | بواسطة Alex John | 13:45، 10 نوفمبر 2025",
+    summary: { quantity: 3, date: "8/4/2026" },
     status: "On the way",
     statusText: "في الطريق",
     deliveryDate: "السبت، 30 نوفمبر 2025",
-    address: "الشارع الكبير، نيويورك بروكلين 5A، صندوق بريد: 212891",
+    address: "مدني",
     total: "USD 2,340.00",
     items: [
       {
