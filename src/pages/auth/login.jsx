@@ -4,7 +4,7 @@ import LoginForm from "../../components/LoginForm";
 const Login = () => {
   return (
     <main className="min-h-screen md:flex">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-screen">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left: image / brand */}
         <div className="hidden md:block">
           <div
@@ -21,7 +21,7 @@ const Login = () => {
                   <TiWiFi />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold">مرحباً بكم في سوداتل</h2>
+              <h2 className="text-3xl font-bold">مرحباً بكم في سوداشوب</h2>
               <p className="mt-4 text-slate-100">
                 حلول الاتصالات والشبكات المتكاملة للشركات والمؤسسات.
               </p>

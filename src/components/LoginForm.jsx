@@ -13,7 +13,7 @@ const LoginForm = () => {
   };
   return (
     <div>
-      <div className="bg-white p-3 md:p-8 mt-10 grow">
+      <div className="bg-white p-3 md:p-8 mt-10">
         <h3 className="text-2xl font-semibold mb-10">تسجيل الدخول</h3>
 
         <form onSubmit={submit} className="space-y-4 md:max-w-2xl">

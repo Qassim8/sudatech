@@ -16,7 +16,7 @@ const RegisterForm = () => {
 
   return (
     <div className="bg-white p-3 md:p-8 mt-10">
-      <h3 className="text-2xl font-semibold mb-10">أنشئ حساب</h3>
+      <h3 className="text-2xl font-semibold mb-10">انشاء حساب جديد</h3>
 
       <form onSubmit={submit} className="space-y-4 w-full md:w-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-7">

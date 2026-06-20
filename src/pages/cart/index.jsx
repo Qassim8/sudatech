@@ -1,10 +1,15 @@
 import CartItem from "../../components/CartItem";
+import useCart from "../../hooks/useCart";
 import { cartStore } from "../../store/cartStore";
 
 const Cart = () => {
+  const token = localStorage.getItem("userToken");
   const cartItems = cartStore((state) => state.cartItems);
+  const { cartItems: cartList } = useCart();
 
-  const subtotal = cartItems.reduce((acc, item) => {
+  const carts = token ? cartList : cartItems;
+
+  const subtotal = carts?.reduce((acc, item) => {
     const price =
       typeof item.price === "string"
         ? Number(item.price.replace(/[^0-9.-]+/g, ""))
@@ -20,7 +25,7 @@ const Cart = () => {
     <main className="container py-12">
       <h2 className="text-2xl font-bold text-(--main-color)">سلة المشتريات</h2>
 
-      {cartItems.length === 0 ? (
+      {carts?.length === 0 ? (
         <div className="mt-6 bg-white rounded-2xl shadow p-6">
           <p className="text-(--text-color)">
             السلة حاليا فارغة — أضف منتجات من المتجر.
@@ -29,8 +34,8 @@ const Cart = () => {
       ) : (
         <div className="mt-6 grid md:grid-cols-2 gap-6 relative">
           <div className="space-y-4">
-            {cartItems?.map((item) => (
-              <CartItem item={item} key={item.documentId} />
+            {carts?.map((item) => (
+              <CartItem item={item || item.product} key={item.documentId} />
             ))}
           </div>
 
@@ -67,7 +72,7 @@ const Cart = () => {
             <div className="mt-4 flex justify-between">
               <div className="text-lg font-bold">المجموع الفرعي</div>
               <div className="font-semibold">
-                {subtotal.toLocaleString()} ج.س
+                {subtotal?.toLocaleString()} ج.س
               </div>
             </div>
 

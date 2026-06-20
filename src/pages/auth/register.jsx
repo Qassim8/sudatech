@@ -5,11 +5,11 @@ import RegisterForm from "../../components/RegisterForm";
 const Register = () => {
   return (
     <main className="min-h-screen">
-      <div className="md:flex gap-14 h-screen">
+      <div className="flex flex-col md:flex-row gap-8">
         {/* Left: image / brand */}
-        <div className="hidden md:block max-w-xl">
+        <div className="hidden md:block h-screen">
           <div
-            className="relative w-full h-full overflow-hidden flex items-center"
+            className="relative w-full h-full overflow-hidden flex items-center justify-center"
             style={{
               background:
                 "linear-gradient(135deg,var(--main-color),var(--gr-color))",
@@ -22,7 +22,7 @@ const Register = () => {
                   <TiWiFi />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold">انضم إلى سوداتل</h2>
+              <h2 className="text-3xl font-bold">انضم إلى سوداشوب</h2>
               <p className="mt-4 text-slate-100">
                 سجّل حساباً للوصول إلى العروض وخيارات الشراء الخاصة.
               </p>

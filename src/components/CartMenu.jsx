@@ -2,9 +2,13 @@ import { Link } from "react-router";
 import CartItem from "./CartItem";
 import { LuShoppingCart, LuX } from "react-icons/lu";
 import { cartStore } from "../store/cartStore";
+import useCart from "../hooks/useCart";
 
 const CartMenu = ({ show, hide }) => {
   const cartItems = cartStore((state) => state.cartItems);
+  const token = localStorage.getItem("userToken");
+  const { cartItems: cartList } = useCart();
+  const carts = token ? cartList : cartItems;
 
   if (show)
     return (
@@ -23,7 +27,7 @@ const CartMenu = ({ show, hide }) => {
             </div>
           </div>
           <div className="space-y-5">
-            {cartItems.map((item) => (
+            {carts.map((item) => (
               <CartItem item={item} key={item.id} />
             ))}
           </div>

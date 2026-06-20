@@ -21,10 +21,10 @@ const Footer = () => {
             </div>
             <div>
               <h1 className="font-bold text-base md:text-xl text-slate-800 tracking-widest grow">
-                سوداتل
+                سوداتك
               </h1>
               <p className="text-xs font-bold text-(--text-color) leading-tight">
-                للاتصالات
+                منتجات التقنية
               </p>
             </div>
           </div>
@@ -115,7 +115,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="text-center py-5 text-sm text-(--text-color)">
-        © {new Date().getFullYear()} سوداتل. جميع الحقوق محفوظة.
+        © {new Date().getFullYear()} سوداتك. جميع الحقوق محفوظة.
       </div>
     </footer>
   );

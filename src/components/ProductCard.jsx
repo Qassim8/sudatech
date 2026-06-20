@@ -1,15 +1,38 @@
-import { BsHeart } from "react-icons/bs";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { FiEye, FiShoppingCart } from "react-icons/fi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { cartStore } from "../store/cartStore";
+import useWishlist from "../hooks/useWishlist";
+import useCart from "../hooks/useCart";
 
 const ProductCard = ({ product }) => {
+  const token = localStorage.getItem("userToken");
+  const { wishlist, handleWishlist } = useWishlist();
+  const navigate = useNavigate();
   const addCart = cartStore((state) => state.addCart);
+  const { addCart: addItem } = useCart();
+
+  const handleCart = token ? addItem : addCart;
+
+  const addToFavorite = () =>
+    token ? handleWishlist(product.documentId) : navigate("/login");
+
+  const isWishlistItem = wishlist?.some(
+    (p) => p.product.documentId === product.documentId,
+  );
 
   return (
-    <div className="group relative p-3 bg-white rounded-2xl overflow-hidden md:shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-200 md:border-slate-100">
-      <div className="absolute top-2 left-2 w-fit p-2 rounded-full bg-slate-100 text-(--text-color) cursor-pointer hover:bg-slate-200 transition-colors duration-300 z-10">
-        <BsHeart />
+    <div className="group relative p-3 bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200">
+      {/* Wishlist Button */}
+      <div
+        className={`absolute top-2 left-2 w-fit p-2 rounded-full bg-slate-100 text-(--text-color) cursor-pointer hover:bg-slate-200 transition-colors duration-300 z-10`}
+        onClick={addToFavorite}
+      >
+        {isWishlistItem ? (
+          <BsHeartFill className="text-red-500" />
+        ) : (
+          <BsHeart />
+        )}
       </div>
 
       {/* Image Section */}
@@ -70,7 +93,7 @@ const ProductCard = ({ product }) => {
         <button
           className="text-xs md:text-sm flex items-center justify-center py-2 px-4
          gap-2 text-white bg-(--main-color) rounded-xl transition-colors duration-300 cursor-pointer"
-          onClick={() => addCart(product)}
+          onClick={() => handleCart(product)}
         >
           اضف للسلة
           <FiShoppingCart />
