@@ -1,6 +1,5 @@
 import MainTitle from "./MainTitle";
 import ProductCard from "./ProductCard";
-import sampleProducts from "../data/sampleProducts";
 import { Link } from "react-router";
 import { GoArrowLeft } from "react-icons/go";
 import useProducts from "../hooks/useProducts";
@@ -29,8 +28,8 @@ const FeaturedProducts = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6 mt-6">
-          {products?.slice(0, 4).map((p) => (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-5 mt-5">
+          {products?.items.slice(0, 4).map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>

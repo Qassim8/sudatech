@@ -1,119 +1,104 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
-import sampleProducts from "../data/sampleProducts";
-import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiSearch } from "react-icons/fi";
 import useProducts from "../hooks/useProducts";
+import { productStore } from "../store/productsStore";
 
-const ShopGrid = ({ filters = {} }) => {
+const ShopGrid = () => {
   const [page, setPage] = useState(1);
   const perPage = 9;
-  const { products: allProducts } = useProducts();
 
-  // create a larger dataset by repeating sample products
-  const products = useMemo(() => {
-    const list = [];
-    for (let i = 0; i < 6; i++) {
-      allProducts?.forEach((p) => list.push({ ...p, id: p.id + i * 10 }));
-    }
-    return list;
-  }, [allProducts]);
+  const filters = productStore((state) => state.filters);
+  const resetFilters = productStore((state) => state.resetFilters);
 
-  const filtered = products.filter((p) => {
-    const q = (filters.search || "").toLowerCase();
-    if (
-      q &&
-      !p.name.toLowerCase().includes(q) &&
-      !p.description.toLowerCase().includes(q)
-    )
-      return false;
-
-    if (filters.categories && filters.categories.length > 0) {
-      const cats = filters.categories.map((c) => c.toLowerCase());
-      const matchCat = cats.some(
-        (c) =>
-          p.name.toLowerCase().includes(c) ||
-          p.brand?.toLowerCase().includes(c),
-      );
-      if (!matchCat) return false;
-    }
-
-    if (filters.brands && filters.brands.length > 0) {
-      const brands = filters.brands.map((b) => b.toLowerCase());
-      if (!brands.includes((p.brand || "").toLowerCase())) return false;
-    }
-
-    if (typeof filters.maxPrice === "number") {
-      const priceNum = Number(String(p.price).replace(/[^0-9.]/g, "")) || 0;
-      if (priceNum > filters.maxPrice) return false;
-    }
-
-    if (filters.inStockOnly) {
-      // sample data doesn't have stock; assume all in stock
-    }
-
-    return true;
+  // جلب البيانات بناءً على الصفحة الحالية
+  const { products, paginationMeta, productsLoad } = useProducts({
+    page,
+    pageSize: perPage,
   });
-
-  // sorting
-  let sorted = filtered.slice();
-  if (filters.sort) {
-    if (filters.sort === "newest") {
-      sorted.sort((a, b) => Number(b.id) - Number(a.id));
-    } else if (filters.sort === "price-asc") {
-      sorted.sort(
-        (a, b) =>
-          (Number(String(a.price).replace(/[^0-9.]/g, "")) || 0) -
-          (Number(String(b.price).replace(/[^0-9.]/g, "")) || 0),
-      );
-    } else if (filters.sort === "price-desc") {
-      sorted.sort(
-        (a, b) =>
-          (Number(String(b.price).replace(/[^0-9.]/g, "")) || 0) -
-          (Number(String(a.price).replace(/[^0-9.]/g, "")) || 0),
-      );
-    }
-  }
-
-  const pages = Math.max(1, Math.ceil(filtered.length / perPage));
-  const start = (page - 1) * perPage;
-  const pageItems = sorted.slice(start, start + perPage);
 
   useEffect(() => {
     setPage(1);
-  }, [
-    filters.search,
-    filters.categories,
-    filters.brands,
-    filters.maxPrice,
-    filters.inStockOnly,
-    filters.sort,
-  ]);
+  }, [filters]);
+
+  if (productsLoad) {
+    return (
+      <div className="text-center p-12 text-gray-500 font-medium">
+        جاري جلب المنتجات...
+      </div>
+    );
+  }
+
+  // 💡 حل النقطة الثانية: واجهة "لا توجد نتائج" احترافية
+  if (!products || products?.items?.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 text-center bg-gray-50 rounded-3xl border border-dashed border-slate-300">
+        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4 text-2xl">
+          <FiSearch />
+        </div>
+        <h3 className="text-lg font-bold text-gray-800 mb-1">
+          لم نجد أي نتائج!
+        </h3>
+        <p className="text-sm text-gray-400 max-w-xs mb-6">
+          جرّب تعديل كلمات البحث أو تصفير فلاتر الأسعار والأصناف للعثور على ما
+          تبحث عنه.
+        </p>
+        <button
+          onClick={resetFilters}
+          className="px-5 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition shadow-sm"
+        >
+          تصفير كل الفلاتر
+        </button>
+      </div>
+    );
+  }
+
+  const totalPages = paginationMeta?.pageCount || 1;
+  const pageNumbers = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1,
+  );
 
   return (
     <div>
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6">
-        {pageItems.map((p) => (
-          <ProductCard key={p.id} product={p} />
+      {/* شبكة المنتجات */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+        {products?.items?.map((p) => (
+          <ProductCard key={p.documentId || p.id} product={p} />
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-3 mt-8">
+      {/* الـ Pagination الرقمي المتطور */}
+      <div className="flex items-center justify-center gap-2 mt-12 select-none">
+        {/* زر الصفحة السابقة */}
         <button
           disabled={page === 1}
           onClick={() => setPage((s) => Math.max(1, s - 1))}
-          className="px-3 py-2 bg-white border border-slate-300 rounded-2xl cursor-pointer shadow"
+          className="p-2.5 bg-white border border-slate-300 rounded-xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition"
         >
           <FiArrowRight />
         </button>
 
-        <div className="px-4 py-2">
-          {page} / {pages}
-        </div>
+        {/* أزرار أرقام الصفحات المتتالية */}
+        {pageNumbers.map((num) => (
+          <button
+            key={num}
+            onClick={() => setPage(num)}
+            className={`w-10 h-10 rounded-xl font-bold border transition text-sm cursor-pointer ${
+              page === num
+                ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-100"
+                : "bg-white text-gray-600 border-slate-300 hover:bg-slate-50"
+            }`}
+          >
+            {num}
+          </button>
+        ))}
 
+        {/* زر الصفحة التالية */}
         <button
-          disabled={page === pages}
-          onClick={() => setPage((s) => Math.min(pages, s + 1))}
-          className="px-3 py-2 bg-white border border-slate-300 rounded-2xl cursor-pointer shadow"
+          disabled={page === totalPages}
+          onClick={() => setPage((s) => Math.min(totalPages, s + 1))}
+          className="p-2.5 bg-white border border-slate-300 rounded-xl cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition"
         >
           <FiArrowLeft />
         </button>

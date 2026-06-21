@@ -36,12 +36,12 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Image Section */}
-      <div className="relative h-32 md:h-60">
+      <div className="relative h-32 md:h-60 flex justify-center items-center">
         {/* Image */}
         <img
           src={`http://localhost:1337${product?.thumbnail?.url}`}
           alt={product?.title}
-          className="max-h-full w-full group-hover:scale-105 transition-transform duration-500"
+          className="max-h-full max-w-full group-hover:scale-105 transition-transform duration-500"
         />
 
         {/* Hover overlay */}

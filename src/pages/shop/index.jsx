@@ -1,11 +1,13 @@
 import { useState } from "react";
 import ShopFilter from "../../components/ShopFilter";
 import ShopGrid from "../../components/ShopGrid";
-
 import { FiFilter } from "react-icons/fi";
+import { shallow } from "zustand/shallow";
+import { productStore } from "../../store/productsStore";
 
 const Shop = () => {
-  const [filters, setFilters] = useState({});
+  const { filters, setFilter } = productStore((state) => state, shallow);
+  const search = productStore((state) => state.filters.search);
   const [showFilterMobile, setShowFilterMobile] = useState(false);
 
   return (
@@ -15,32 +17,32 @@ const Shop = () => {
         <div className="flex flex-col md:flex-row gap-3 md:items-center">
           <input
             placeholder="ابحث عن منتج..."
-            onChange={(e) =>
-              setFilters((p) => ({ ...p, search: e.target.value }))
-            }
+            value={search}
+            onChange={(e) => setFilter("search", e.target.value)}
             className="flex-1 py-2 px-3 border border-slate-300 rounded-2xl shadow-sm"
           />
 
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowFilterMobile(true)}
-              className="md:hidden inline-flex items-center gap-2 py-2 px-3 border rounded-2xl"
+              className="md:hidden inline-flex items-center gap-2 py-2 px-3 border border-slate-300 rounded-2xl"
             >
               <FiFilter />
               فلاتر
             </button>
 
-            <select
-              onChange={(e) =>
-                setFilters((p) => ({ ...p, sort: e.target.value }))
-              }
-              className="w-48 py-1 px-3 border border-slate-300 rounded-2xl shadow-sm"
-            >
-              <option value="">ترتيب افتراضي</option>
-              <option value="newest">الأحدث</option>
-              <option value="price-asc">السعر: الأقل</option>
-              <option value="price-desc">السعر: الأعلى</option>
-            </select>
+            <div className="flex items-center gap-2">
+              <p>الترتيب حسب: </p>
+              <select
+                value={filters.sort}
+                onChange={(e) => setFilter("sort", e.target.value)}
+                className="p-2 border border-slate-300 rounded-2xl"
+              >
+                <option value="newest">الأحدث</option>
+                <option value="price-asc">الأقل سعراً</option>
+                <option value="price-desc">الأعلى سعراً</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +50,7 @@ const Shop = () => {
       <div className="grid md:grid-cols-4 gap-6">
         <aside className="md:col-span-1 hidden md:block">
           <ShopFilter
-            onFilter={(f) => setFilters((prev) => ({ ...prev, ...(f || {}) }))}
+            onFilter={(f) => setFilter((prev) => ({ ...prev, ...(f || {}) }))}
           />
         </aside>
 
@@ -71,7 +73,7 @@ const Shop = () => {
               </div>
               <ShopFilter
                 onFilter={(f) => {
-                  setFilters((prev) => ({ ...prev, ...(f || {}) }));
+                  setFilter((prev) => ({ ...prev, ...(f || {}) }));
                   setShowFilterMobile(false);
                 }}
               />
