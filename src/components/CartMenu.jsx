@@ -20,23 +20,39 @@ const CartMenu = ({ show, hide }) => {
         <div
           className={`overflow-y-scroll absolute h-full w-screen md:w-[35vw] top-0 right-0 bg-white p-5`}
         >
-          <div className="flex justify-between items-center pb-10">
-            <h2 className="text-xl font-extrabold">عناصر السلة</h2>
-            <div className="cursor-pointer group" onClick={hide}>
-              <LuX className="text-2xl font-bold text-(--text-color) transition-colors duration-300 group-hover:text-slate-800" />
+          {carts?.length >= 1 ? (
+            <div>
+              {" "}
+              <div className="flex justify-between items-center pb-10">
+                <h2 className="text-xl font-extrabold">عناصر السلة</h2>
+                <div className="cursor-pointer group" onClick={hide}>
+                  <LuX className="text-2xl font-bold text-(--text-color) transition-colors duration-300 group-hover:text-slate-800" />
+                </div>
+              </div>
+              <div className="space-y-5">
+                {carts.map((item) => (
+                  <CartItem item={item} key={item.id} />
+                ))}
+              </div>
+              <div className="sticky -bottom-5 left-2 right-2 w-full h-20 bg-white flex justify-center items-center">
+                <Link to="/cart" onClick={hide} className="main-btn w-full">
+                  <span>انتقل للسلة</span>
+                  <LuShoppingCart className="ms-2" />
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="space-y-5">
-            {carts.map((item) => (
-              <CartItem item={item} key={item.id} />
-            ))}
-          </div>
-          <div className="sticky -bottom-5 left-2 right-2 w-full h-20 bg-white flex justify-center items-center">
-            <Link to="/cart" onClick={hide} className="main-btn w-full">
-              <span>انتقل للسلة</span>
-              <LuShoppingCart className="ms-2" />
-            </Link>
-          </div>
+          ) : (
+            <div className="container py-20 flex flex-col justify-center text-center gap-5">
+              <div className="">
+                <h2 className="text-2xl font-bold text-(--main-color)">
+                  السلة فارغة قم باضافة منتجات
+                </h2>
+              </div>
+              <Link to={"/shop"} className="main-btn w-fit! mx-auto">
+                انتقل للمتجر
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     );

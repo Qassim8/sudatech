@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import ProductCard from "../../components/ProductCard";
 import useWishlist from "../../hooks/useWishlist";
+import ForShowList from "../../components/ForShowList";
 
 const Wishlist = () => {
   const token = localStorage.getItem("userToken");
@@ -8,18 +9,7 @@ const Wishlist = () => {
     useWishlist();
 
   if (!token) {
-    return (
-      <div className="container py-20 flex flex-col justify-center text-center gap-5">
-        <div className="">
-          <h2 className="text-2xl font-bold text-(--main-color)">
-            قم بتسجيل الدخول لرؤية قائمة مفضلاتك
-          </h2>
-        </div>
-        <Link to={"/login"} className="main-btn w-fit! mx-auto">
-          الدخول
-        </Link>
-      </div>
-    );
+    return <ForShowList page={"مفضلاتك"} />;
   }
 
   if (wishlistLoading) {
