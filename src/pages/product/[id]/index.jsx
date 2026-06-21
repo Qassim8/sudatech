@@ -1,36 +1,49 @@
-import { Link, useParams } from "react-router";
-import { FiArrowLeft, FiMinus, FiPlus, FiShoppingCart } from "react-icons/fi";
-import { BsHeart } from "react-icons/bs";
+import { Link, useNavigate, useParams } from "react-router";
+import { FiMinus, FiPlus, FiShoppingCart } from "react-icons/fi";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 import ProductCard from "../../../components/ProductCard";
 import useProducts from "../../../hooks/useProducts";
 import { useState } from "react";
-import { FaAngleLeft } from "react-icons/fa6";
 import { RiArrowLeftSLine } from "react-icons/ri";
+import useWishlist from "../../../hooks/useWishlist";
+import useCart from "../../../hooks/useCart";
+import { cartStore } from "../../../store/cartStore";
+import Breadcrumbs from "../../../components/Breadcrumb";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { singleProduct: product, products } = useProducts({ productId: id });
   const [imageUrl, setImageUrl] = useState(null);
+  const token = localStorage.getItem("userToken");
+  const { wishlist, handleWishlist } = useWishlist();
+  const navigate = useNavigate();
+  const addCart = cartStore((state) => state.addCart);
+  const { addCart: addItem } = useCart();
+  // 💡 1. إضافة الـ State المحلي للتحكم في كمية الطلب الحالية
+  const [quantity, setQuantity] = useState(1);
 
-  console.log(product);
+  // 💡 2. دالتين الزيادة والنقصان
+  const handleIncrement = () => setQuantity((prev) => prev + 1);
+  const handleDecrement = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-  // sample thumbnails (reusing same image)
+  const onAddToCart = () => {
+    if (!product) return;
+    // نرسل المنتج والكمية التي حددها المستخدم
+    handleCart({ product, quantity });
+  };
+
+  const handleCart = token ? addItem : addCart;
+
+  const addToFavorite = () =>
+    token ? handleWishlist(product.documentId) : navigate("/login");
+
+  const isWishlistItem = wishlist?.some(
+    (p) => p.product.documentId === product.documentId,
+  );
 
   return (
     <main>
-      <section className="py-12 bg-(--color-background)">
-        <div className="container flex items-center justify-start gap-2">
-          <Link to="/" className="">
-            الرئيسية
-          </Link>
-          <RiArrowLeftSLine />
-          <Link to="/shop" className="">
-            المنتجات
-          </Link>
-          <RiArrowLeftSLine />
-          <span>{product?.title}</span>
-        </div>
-      </section>
+      <Breadcrumbs productName={product?.title} />
       <section className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* Left: images */}
@@ -79,32 +92,60 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="md:hidden flex justify-between items-center border border-slate-300 mt-3 rounded-full overflow-hidden">
-              <button className="p-4 cursor-pointer">
-                <FiMinus className="text-(--text-color)" />
+            {/* 💡 أزرار التحكم بالكمية للموبايل (Mobile Quantity Selector) */}
+            <div className="md:hidden flex justify-between items-center border border-slate-200 bg-white rounded-2xl overflow-hidden shadow-sm">
+              <button
+                onClick={handleDecrement}
+                className="p-4 hover:bg-gray-50 transition"
+              >
+                <FiMinus className="text-gray-600" />
               </button>
-              <div className="px-6">{product?.quantity || 0}</div>
-              <button className="p-4 cursor-pointer">
-                <FiPlus className="text-(--text-color)" />
+              <div className="px-6 font-bold text-gray-800 text-lg">
+                {quantity}
+              </div>
+              <button
+                onClick={handleIncrement}
+                className="p-4 hover:bg-gray-50 transition"
+              >
+                <FiPlus className="text-gray-600" />
               </button>
             </div>
 
             <div className="mt-6 flex items-center gap-4">
-              <div className="w-fit p-4 rounded-full bg-slate-100 text-(--text-color) cursor-pointer hover:bg-slate-200 transition-colors duration-300 z-10">
-                <BsHeart className="text-xl" />
+              <div
+                onClick={addToFavorite}
+                className="w-fit p-4 rounded-full bg-slate-100 text-(--text-color) cursor-pointer hover:bg-slate-200 transition-colors duration-300 z-10"
+              >
+                {isWishlistItem ? (
+                  <BsHeartFill className="text-red-500 text-xl" />
+                ) : (
+                  <BsHeart className="text-xl" />
+                )}
               </div>
 
-              <div className="hidden md:flex items-center border border-slate-300 rounded-full overflow-hidden">
-                <button className="p-4 cursor-pointer">
-                  <FiMinus className="text-(--text-color)" />
+              {/* 💡 أزرار التحكم بالكمية للشاشات الكبيرة (Desktop Quantity Selector) */}
+              <div className="hidden md:flex items-center border border-slate-200 bg-white rounded-2xl overflow-hidden shadow-sm">
+                <button
+                  onClick={handleDecrement}
+                  className="p-4 hover:bg-gray-50 transition"
+                >
+                  <FiMinus className="text-gray-600" />
                 </button>
-                <div className="px-6">{product?.quantity || 0}</div>
-                <button className="p-4 cursor-pointer">
-                  <FiPlus className="text-(--text-color)" />
+                <div className="px-6 font-bold text-gray-800 text-lg w-14 text-center">
+                  {quantity}
+                </div>
+                <button
+                  onClick={handleIncrement}
+                  className="p-4 hover:bg-gray-50 transition"
+                >
+                  <FiPlus className="text-gray-600" />
                 </button>
               </div>
 
-              <button className="grow md:grow-0 flex items-center justify-center gap-2 px-6 py-3 bg-(--main-color) text-white rounded-2xl">
+              <button
+                onClick={onAddToCart}
+                className="grow md:grow-0 flex items-center justify-center gap-2 px-6 py-3 bg-(--main-color) text-white rounded-2xl"
+              >
                 <FiShoppingCart /> إضافة إلى السلة
               </button>
             </div>
@@ -141,7 +182,17 @@ const ProductDetail = () => {
                   ✓
                 </div>
                 <div>
-                  <div className="font-medium">الشحن: 50 ج.س</div>
+                  <div className="font-medium">الشحن: حسب المنطقة والكمية</div>
+                </div>
+              </div>
+              <div className="p-4 border border-slate-300 rounded-2xl flex items-center gap-3">
+                <div className="w-8 h-8 bg-slate-100 rounded flex items-center justify-center">
+                  ✓
+                </div>
+                <div>
+                  <div className="font-medium">
+                    الدفع: بنكك او نقداً عند الاستلام
+                  </div>
                 </div>
               </div>
             </div>
@@ -161,10 +212,15 @@ const ProductDetail = () => {
         </section>
         <section className="py-10">
           <h2 className="text-xl font-bold mb-10">منتجات ذات صلة</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {products?.slice(0, 4).map((p) => (
-              <ProductCard product={p.id} />
-            ))}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-5">
+            {products?.items
+              ?.filter(
+                (p) =>
+                  p?.category?.documentId === product?.category?.documentId,
+              )
+              .map((p) => (
+                <ProductCard key={p.documentId} product={p} />
+              ))}
           </div>
         </section>
       </section>

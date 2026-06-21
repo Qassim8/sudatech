@@ -27,6 +27,7 @@ const RegisterForm = () => {
               onChange={(e) => setName(e.target.value)}
               placeholder="عصام احمد عامر......"
               className="w-full p-3 border border-slate-300 rounded-2xl focus:outline-none focus:ring focus:ring-blue-400"
+              required
             />
           </div>
 
@@ -37,6 +38,7 @@ const RegisterForm = () => {
               placeholder="example@gmail.com"
               onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 border border-slate-300 rounded-2xl focus:outline-none focus:ring focus:ring-blue-400"
+              required
             />
           </div>
 
@@ -47,6 +49,7 @@ const RegisterForm = () => {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="+249-123456789"
               className="w-full p-3 border border-slate-300 rounded-2xl focus:outline-none focus:ring focus:ring-blue-400"
+              required
             />
           </div>
 
@@ -58,6 +61,7 @@ const RegisterForm = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="***************"
               className="w-full p-3 border border-slate-300 rounded-2xl focus:outline-none focus:ring focus:ring-blue-400"
+              required
             />
           </div>
         </div>

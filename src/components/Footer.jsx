@@ -102,14 +102,14 @@ const Footer = () => {
           <h5 className="font-semibold mb-5">تواصل</h5>
           <ul className=" text-sm text-(--text-color) space-y-2">
             <li className="flex items-center gap-2">
-              <FiPhone className="text-(--gr-color)" /> +966 5X XXX XXXX
+              <FiPhone className="text-(--gr-color)" /> +249 1X XXX XXXX
             </li>
             <li className="flex items-center gap-2">
               <FiMail className="text-(--gr-color)" /> info@example.com
             </li>
             <li className="flex items-center gap-2">
-              <FiMapPin className="text-(--gr-color)" /> الرياض، المملكة العربية
-              السعودية
+              <FiMapPin className="text-(--gr-color)" />
+              الخرطوم - السودان
             </li>
           </ul>
         </div>

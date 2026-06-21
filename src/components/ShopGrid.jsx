@@ -3,6 +3,7 @@ import ProductCard from "./ProductCard";
 import { FiArrowLeft, FiArrowRight, FiSearch } from "react-icons/fi";
 import useProducts from "../hooks/useProducts";
 import { productStore } from "../store/productsStore";
+import { ProductSkeleton } from "./Skeletons";
 
 const ShopGrid = () => {
   const [page, setPage] = useState(1);
@@ -23,8 +24,10 @@ const ShopGrid = () => {
 
   if (productsLoad) {
     return (
-      <div className="text-center p-12 text-gray-500 font-medium">
-        جاري جلب المنتجات...
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5">
+        {Array.from({ length: perPage }).map((_, i) => (
+          <ProductSkeleton key={i} />
+        ))}
       </div>
     );
   }
@@ -62,7 +65,7 @@ const ShopGrid = () => {
   return (
     <div>
       {/* شبكة المنتجات */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-5">
         {products?.items?.map((p) => (
           <ProductCard key={p.documentId || p.id} product={p} />
         ))}

@@ -43,14 +43,14 @@ const Header = () => {
           <div className="flex justify-center items-center text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) h-9 w-9 rounded-2xl shadow-lg shadow-(--main-color)">
             <TiWiFi className="text-lg" />
           </div>
-          <div>
+          <Link to="/">
             <h1 className="font-bold text-base md:text-xl text-slate-800 tracking-widest grow">
               سوداتك
             </h1>
             <p className="text-xs font-bold text-(--text-color) leading-tight">
               منتجات التقنية
             </p>
-          </div>
+          </Link>
         </div>
         <ul className="hidden md:flex space-x-6">
           {links.map((link) => (
@@ -95,12 +95,12 @@ const Header = () => {
           />
 
           {token ? (
-            <button className="hidden md:flex main-btn" onClick={removeToken}>
+            <button className="hidden! md:flex! main-btn" onClick={removeToken}>
               <span className="">الخروج</span>
               <GoSignOut className="text-xl" />
             </button>
           ) : (
-            <Link to={"/login"} className="hidden md:flex main-btn">
+            <Link to={"/login"} className="hidden! md:flex! main-btn">
               <span className="">تسجيل الدخول</span>
               <GoSignIn className="text-xl" />
             </Link>
@@ -146,7 +146,7 @@ const Header = () => {
                 <GoSignOut className="text-xl" />
               </button>
             ) : (
-              <Link to={"/login"} className="hidden md:flex main-btn">
+              <Link to={"/login"} className="hidden md:flex! main-btn">
                 <span className="">تسجيل الدخول</span>
                 <GoSignIn className="text-xl" />
               </Link>

@@ -21,7 +21,7 @@ const Login = () => {
                   <TiWiFi />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold">مرحباً بكم في سوداشوب</h2>
+              <h2 className="text-3xl font-bold">مرحباً بكم في سوداتك</h2>
               <p className="mt-4 text-slate-100">
                 حلول الاتصالات والشبكات المتكاملة للشركات والمؤسسات.
               </p>

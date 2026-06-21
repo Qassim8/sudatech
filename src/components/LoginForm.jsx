@@ -25,6 +25,7 @@ const LoginForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@gmail.com"
                 className="w-full p-3 border border-slate-300 rounded-2xl focus:outline-none focus:ring focus:ring-blue-400"
+                required
               />
             </div>
 
@@ -36,6 +37,7 @@ const LoginForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="************"
                 className="w-full p-3 border border-slate-300 rounded-2xl focus:outline-none focus:ring focus:ring-blue-400"
+                required
               />
             </div>
           </div>

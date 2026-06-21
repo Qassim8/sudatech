@@ -22,7 +22,7 @@ const Register = () => {
                   <TiWiFi />
                 </div>
               </div>
-              <h2 className="text-3xl font-bold">انضم إلى سوداشوب</h2>
+              <h2 className="text-3xl font-bold">انضم إلى سوداتك</h2>
               <p className="mt-4 text-slate-100">
                 سجّل حساباً للوصول إلى العروض وخيارات الشراء الخاصة.
               </p>

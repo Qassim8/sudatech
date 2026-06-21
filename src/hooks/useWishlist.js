@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { BASE_URL } from "../config";
+import toast from "react-hot-toast";
 
 const useWishlist = () => {
-  const BASE_URL = `http://localhost:1337/api/favorites`;
+  const resourceBase = `${BASE_URL}/favorites`;
   const token = localStorage.getItem("userToken");
   const headers = { headers: { Authorization: `Bearer ${token}` } };
   const queryClient = useQueryClient();
@@ -15,12 +17,19 @@ const useWishlist = () => {
   } = useQuery({
     queryKey: ["wishlist", token],
     queryFn: async () => {
-      const { data } = await axios.get(`${BASE_URL}/me`, headers);
+      const { data } = await axios.get(`${resourceBase}/me`, headers);
 
       return data.data || [];
     },
     staleTime: 12000,
     enabled: !!token,
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "فشل جلب قائمة المفضلات";
+      toast.error(msg);
+    },
   });
 
   const { mutate: handleWishlist } = useMutation({
@@ -31,10 +40,13 @@ const useWishlist = () => {
       );
 
       if (isFav) {
-        return await axios.delete(`${BASE_URL}/${isFav.documentId}`, headers);
+        return await axios.delete(
+          `${resourceBase}/${isFav.documentId}`,
+          headers,
+        );
       } else {
         const { data } = await axios.post(
-          `${BASE_URL}`,
+          `${resourceBase}`,
           {
             data: {
               product: itemDocumentId,
@@ -45,8 +57,14 @@ const useWishlist = () => {
         return data;
       }
     },
-    onSuccess: () => {
+    onSuccess: (_, vars, ctx) => {
+      toast.success("تم تحديث المفضلات بنجاح");
       return queryClient.invalidateQueries({ queryKey: ["wishlist", token] });
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل تحديث المفضلات";
+      toast.error(msg);
     },
   });
 

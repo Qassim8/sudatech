@@ -1,8 +1,7 @@
 import { FiCheck } from "react-icons/fi";
 import { productStore } from "../store/productsStore";
 import { shallow } from "zustand/shallow";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import useCatsBrands from "../hooks/useCatsBrands";
 
 const ShopFilter = () => {
   // سحب الفلاتر والدوال بشكل مباشر ونظيف من المتجر
@@ -10,67 +9,19 @@ const ShopFilter = () => {
     (state) => state,
     shallow,
   );
+  const { brands, categories } = useCatsBrands();
 
-  const { data: brands = [] } = useQuery({
-    queryKey: ["brands"],
-    queryFn: async () => {
-      const { data } = await axios.get("http://localhost:1337/api/brands");
-      return data.data;
-    },
-    staleTime: Infinity,
-  });
-
-  console.log(brands);
-
-  const { data: categories = [] } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const { data } = await axios.get("http://localhost:1337/api/categories");
-      return data.data;
-    },
-    staleTime: Infinity,
-  });
-
-  // ⚠️ قمت بإضافة الـ documentId الحقيقي هنا (تأكد من مطابقتها لما في قاعدة بيانات Strapi)
-  // const categories = [
-  //   {
-  //     key: "Routers",
-  //     documentId: "router-doc-id-123",
-  //     label: "الراوترات",
-  //     count: 24,
-  //   },
-  //   { key: "SIM", documentId: "sim-doc-id-123", label: "الشرائحات", count: 18 },
-  //   {
-  //     key: "Servers",
-  //     documentId: "server-doc-id-123",
-  //     label: "الخوادم",
-  //     count: 12,
-  //   },
-  //   {
-  //     key: "Cables",
-  //     documentId: "cable-doc-id-123",
-  //     label: "الكابلات",
-  //     count: 36,
-  //   },
-  // ];
-
-  // ⚠️ الماركات يفضل أن تكون كائنات تحتوي على الـ documentId أيضاً بدلاً من مصفوفة نصوص مجردة
-  // const brands = [
-  //   { id: "cisco-id", label: "Cisco" },
-  //   { id: "huawei-id", label: "Huawei" },
-  //   { id: "ubiquiti-id", label: "Ubiquiti" },
-  //   { id: "tplink-id", label: "TP-Link" },
-  //   { id: "dell-id", label: "Dell" },
-  //   { id: "mikrotik-id", label: "MikroTik" },
-  // ];
+  console.log(categories);
 
   return (
-    <aside className="p-4 bg-white rounded-2xl border border-slate-300 sticky top-6">
+    <aside className="p-4 bg-white rounded-2xl border border-slate-300 sticky top-16">
       <div className="mt-4 space-y-4 text-(--text-color)">
         {/* الأصناف - فلاتر حية ومتصلة بـ Zustand */}
         <div>
-          <div className="text-sm font-medium text-slate-500 mb-3">الاصناف</div>
-          <div className="space-y-2">
+          <div className="text-base font-semibold mb-2 text-slate-800">
+            الاصناف
+          </div>
+          <div className="space-y-1">
             {categories.map((c) => (
               <label
                 key={c.documentId}
@@ -95,8 +46,10 @@ const ShopFilter = () => {
 
         {/* الماركة - أزرار مخصصة متصلة بـ Zustand */}
         <div>
-          <div className="text-sm font-medium text-slate-500 mb-3">الماركة</div>
-          <div className="space-y-2">
+          <div className="text-base font-semibold mb-2 text-slate-800">
+            الماركة
+          </div>
+          <div className="space-y-1">
             {brands.map((b) => (
               <label
                 key={b.documentId}
@@ -105,7 +58,7 @@ const ShopFilter = () => {
                 <button
                   type="button"
                   onClick={() => toggleMultiFilter("brands", b.documentId)}
-                  className={`w-6 h-6 rounded-sm flex items-center justify-center border transition ${
+                  className={`w-4 h-4 rounded-sm flex items-center justify-center border transition ${
                     filters.brands.includes(b.documentId)
                       ? "bg-(--main-color) text-white border-blue-600"
                       : "bg-white border-slate-300"
@@ -121,7 +74,7 @@ const ShopFilter = () => {
 
         {/* نطاق السعر - تحديث فوري */}
         <div>
-          <div className="text-sm font-medium text-slate-500 mb-3">
+          <div className="text-base font-semibold mb-2 text-slate-800">
             نطاق السعر
           </div>
           <div className="px-2">

@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { BASE_URL } from "../config";
+import toast from "react-hot-toast";
 
 const useCart = () => {
-  const BASE_URL = `http://localhost:1337/api/carts`;
+  const resourceBase = `${BASE_URL}/carts`;
   const token = localStorage.getItem("userToken");
   const headers = { headers: { Authorization: `Bearer ${token}` } };
   const queryClient = useQueryClient();
@@ -14,15 +16,20 @@ const useCart = () => {
     queryKey: ["cartItems", token],
     queryFn: async () => {
       // ✅ تعديل الـ Populate والـ الفلترة لضمان عودة المنتج وصورته وسلة المستخدم الحالي فقط
-      const { data } = await axios.get(`${BASE_URL}/me`, headers);
+      const { data } = await axios.get(`${resourceBase}/me`, headers);
       return data.data || [];
     },
     enabled: !!token,
     staleTime: 10000,
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل جلب محتويات السلة";
+      toast.error(msg);
+    },
   });
 
   // 2. إضافة منتج أو زيادة الكمية
-  const { mutate: addCart } = useMutation({
+  const addMutation = useMutation({
     mutationFn: async (itemData) => {
       if (!itemData || !itemData.documentId)
         throw new Error("خطأ في تفاصيل المنتج");
@@ -41,7 +48,7 @@ const useCart = () => {
       if (existingItem) {
         // تحديث الكمية (PUT)
         const { data } = await axios.put(
-          `${BASE_URL}/${existingItem.documentId}`,
+          `${resourceBase}/${existingItem.documentId}`,
           {
             data: {
               quantity: (existingItem.quantity || 1) + 1,
@@ -53,7 +60,7 @@ const useCart = () => {
       } else {
         // إضافة جديد (POST)
         const { data } = await axios.post(
-          `${BASE_URL}`,
+          `${resourceBase}`,
           {
             data: {
               product: itemData.documentId,
@@ -66,12 +73,20 @@ const useCart = () => {
       }
     },
     onSuccess: () => {
+      toast.success("تمت إضافة المنتج أو زيادة الكمية في السلة");
       return queryClient.invalidateQueries({ queryKey: ["cartItems", token] });
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "فشل إضافة المنتج إلى السلة";
+      toast.error(msg);
     },
   });
 
   // 3. إنقاص الكمية أو الحذف التلقائي لو الكمية وصلت 1
-  const { mutate: removeCart } = useMutation({
+  const removeMutation = useMutation({
     mutationFn: async (itemData) => {
       if (!itemData || !itemData.documentId)
         throw new Error("خطأ في تفاصيل المنتج");
@@ -87,7 +102,7 @@ const useCart = () => {
 
       if (isCart && isCart.quantity > 1) {
         const { data } = await axios.put(
-          `${BASE_URL}/${isCart.documentId}`,
+          `${resourceBase}/${isCart.documentId}`,
           {
             data: { quantity: isCart.quantity - 1 },
           },
@@ -95,32 +110,48 @@ const useCart = () => {
         );
         return data;
       } else if (isCart) {
-        return await axios.delete(`${BASE_URL}/${isCart.documentId}`, headers);
+        return await axios.delete(
+          `${resourceBase}/${isCart.documentId}`,
+          headers,
+        );
       }
     },
     onSuccess: () => {
-      // ✅ تصحيح كتابة الـ Object للـ key عشان ما يضربش الكاش
+      toast.success("تم تحديث كمية المنتج في السلة");
       return queryClient.invalidateQueries({ queryKey: ["cartItems", token] });
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل تعديل كمية المنتج";
+      toast.error(msg);
     },
   });
 
   // 4. حذف السطر بالكامل (Delete button)
-  const { mutate: deleteCart } = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: async (docId) => {
-      return await axios.delete(`${BASE_URL}/${docId}`, headers);
+      return await axios.delete(`${resourceBase}/${docId}`, headers);
     },
     onSuccess: () => {
-      // ✅ تصحيح كتابة الـ Object للـ key
+      toast.success("تم حذف المنتج من السلة");
       return queryClient.invalidateQueries({ queryKey: ["cartItems", token] });
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل حذف المنتج";
+      toast.error(msg);
     },
   });
 
   return {
     cartItems,
     isLoading,
-    addCart,
-    removeCart,
-    deleteCart,
+    addCart: addMutation.mutate,
+    removeCart: removeMutation.mutate,
+    deleteCart: deleteMutation.mutate,
+    isAdding: addMutation.isLoading,
+    isRemoving: removeMutation.isLoading,
+    isDeleting: deleteMutation.isLoading,
   };
 };
 

@@ -51,7 +51,7 @@ const OrderCard = ({ order }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 py-3 border-y border-y-slate-300">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 py-3 border-t border-t-slate-300">
         {order.items?.map((item, idx) => (
           <div
             key={idx}
@@ -59,7 +59,7 @@ const OrderCard = ({ order }) => {
           >
             <div className="w-20 h-16 rounded-xl flex justify-center items-center bg-white">
               <img
-                src={item?.thumbnail}
+                src={`http://localhost:1337${item?.thumbnail}`}
                 alt={item?.title}
                 className="w-full max-h-full object-cover"
               />
@@ -73,9 +73,6 @@ const OrderCard = ({ order }) => {
           </div>
         ))}
       </div>
-      <button className="mt-3 py-2 px-5 bg-red-500 border border-slate-300 rounded-2xl cursor-pointer transition-colors duration-300 text-white hover:bg-red-600/80 hover:border-transparent">
-        إلغاء
-      </button>
     </div>
   );
 };

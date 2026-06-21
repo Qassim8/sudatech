@@ -2,9 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { cartStore } from "../store/cartStore";
+import { BASE_URL } from "../config";
+import toast from "react-hot-toast";
 
 const useAuth = () => {
-  const BASE_URL = `http://localhost:1337/api/auth/local`;
+  const authBase = `${BASE_URL}/auth/local`;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const clearCart = cartStore((state) => state.clearCart);
@@ -16,7 +18,7 @@ const useAuth = () => {
     isError: loginError,
   } = useMutation({
     mutationFn: async (userData) => {
-      const { data } = await axios.post(`${BASE_URL}`, userData);
+      const { data } = await axios.post(`${authBase}`, userData);
       return data;
     },
     onSuccess: ({ jwt, user }) => {
@@ -25,6 +27,12 @@ const useAuth = () => {
       console.log(user);
       clearCart();
       navigate("/");
+      toast.success("تم تسجيل الدخول بنجاح");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.error?.message || err?.message || "فشل تسجيل الدخول";
+      toast.error(msg);
     },
   });
 
@@ -35,14 +43,19 @@ const useAuth = () => {
     isError: registerError,
   } = useMutation({
     mutationFn: async (userData) => {
-      const res = await axios.post(`${BASE_URL}/register`, userData, {
+      const res = await axios.post(`${authBase}/register`, userData, {
         headers: "",
       });
       if (!res.ok) throw new Error("مشكلة في بيانات المستخدم");
       return res.data;
     },
     onSuccess: () => {
-      console.log();
+      toast.success("تم إنشاء الحساب بنجاح");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل إنشاء الحساب";
+      toast.error(msg);
     },
   });
 

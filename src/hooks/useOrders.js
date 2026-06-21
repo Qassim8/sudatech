@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { BASE_URL } from "../config";
+import toast from "react-hot-toast";
 
 const useOrders = () => {
   const token = localStorage.getItem("userToken");
-  const userId = localStorage.getItem("userData");
   const headers = { headers: { Authorization: `Bearer ${token}` } };
-  const BASE_URL = `http://localhost:1337/api/orders`;
+  const resourceBase = `${BASE_URL}/orders`;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -18,12 +19,17 @@ const useOrders = () => {
   } = useQuery({
     queryKey: ["orders", token],
     queryFn: async () => {
-      const { data } = await axios.get(`${BASE_URL}/me`, headers);
+      const { data } = await axios.get(`${resourceBase}/me`, headers);
 
       return data.data || [];
     },
     enabled: !!token,
     staleTime: 20000,
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل جلب الطلبات";
+      toast.error(msg);
+    },
   });
 
   const {
@@ -35,7 +41,7 @@ const useOrders = () => {
     mutationFn: async (orderInfo) => {
       if (!orderInfo) return;
       const { data } = await axios.post(
-        `${BASE_URL}`,
+        `${resourceBase}`,
         {
           data: {
             address: orderInfo.address,
@@ -51,6 +57,12 @@ const useOrders = () => {
       navigate("/orders");
       queryClient.invalidateQueries({ queryKey: ["orders", token] });
       queryClient.invalidateQueries({ queryKey: ["cartItems", token] });
+      toast.success("تم إنشاء الطلب بنجاح");
+    },
+    onError: (err) => {
+      const msg =
+        err?.response?.data?.message || err?.message || "فشل إنشاء الطلب";
+      toast.error(msg);
     },
   });
   return {

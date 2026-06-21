@@ -39,7 +39,9 @@ export const cartStore = create(
       }),
     removeItem: (itemId) =>
       set((state) => ({
-        cartItems: state.cartItems?.filter((item) => item.id !== itemId),
+        cartItems: state.cartItems?.filter(
+          (item) => item.documentId !== itemId,
+        ),
       })),
     cartTotal: () =>
       set((state) => ({

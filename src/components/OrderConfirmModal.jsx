@@ -11,6 +11,11 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
 
   const handleOrder = () => createOrder({ name, phone, address });
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleOrder();
+  };
+
   useEffect(() => {
     if (isOpen) {
       setError("");
@@ -41,7 +46,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
           </button>
         </div>
 
-        <div className="space-y-3">
+        <form className="space-y-3" onSubmit={handleSubmit}>
           <div>
             <label className="block mb-1">الاسم</label>
             <input
@@ -49,6 +54,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
               onChange={(e) => setName(e.target.value)}
               placeholder="الاسم الكامل"
               className="w-full border border-slate-300 p-2 rounded-lg"
+              required
             />
           </div>
 
@@ -59,6 +65,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="09xxxxxxxx"
               className="w-full border border-slate-300 p-2 rounded-lg"
+              required
             />
           </div>
 
@@ -69,6 +76,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
               onChange={(e) => setAddress(e.target.value)}
               placeholder="العنوان الكامل (الشارع، الحي، المدينة)"
               className="w-full border border-slate-300 p-2 rounded-lg resize-none"
+              required
             />
           </div>
 
@@ -84,7 +92,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
 
             <div className="flex gap-2">
               <button
-                onClick={handleOrder}
+                type="submit"
                 className="flex-1 py-3 bg-(--main-color) text-white rounded-2xl cursor-pointer hover:bg-(--main-color)/80 transition-colors duration-300"
               >
                 تأكيد الطلب
@@ -97,7 +105,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
               </button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
