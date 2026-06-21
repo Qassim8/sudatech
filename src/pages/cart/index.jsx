@@ -1,6 +1,8 @@
 import CartItem from "../../components/CartItem";
 import useCart from "../../hooks/useCart";
 import { cartStore } from "../../store/cartStore";
+import { useState } from "react";
+import OrderConfirmModal from "../../components/OrderConfirmModal";
 
 const Cart = () => {
   const token = localStorage.getItem("userToken");
@@ -20,11 +22,17 @@ const Cart = () => {
 
   const shippingFee = subtotal > 0 ? 10000 : 0;
   const total = subtotal + shippingFee;
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleConfirm = (payload) => {
+    // For now just log and close modal. Integration with backend/checkout can be added.
+    console.log("order payload:", payload);
+    setShowConfirm(false);
+    alert("تم إرسال الطلب، شكراً لك!");
+  };
 
   return (
     <main className="container py-12">
-      <h2 className="text-2xl font-bold text-(--main-color)">سلة المشتريات</h2>
-
       {carts?.length === 0 ? (
         <div className="mt-6 bg-white rounded-2xl shadow p-6">
           <p className="text-(--text-color)">
@@ -34,65 +42,57 @@ const Cart = () => {
       ) : (
         <div className="mt-6 grid md:grid-cols-2 gap-6 relative">
           <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-(--main-color)">
+              سلة المشتريات
+            </h2>
             {carts?.map((item) => (
               <CartItem item={item || item.product} key={item.documentId} />
             ))}
           </div>
 
-          <aside className="border border-slate-300 rounded-2xl p-6 sticky top-18 h-fit">
-            <div className="text-2xl font-bold">ملخص الطلب</div>
+          <div>
+            <h2 className="text-2xl font-bold text-(--main-color) mb-4">
+              معلومات الطلب
+            </h2>
+            <aside className="border border-slate-300 rounded-2xl p-6 sticky top-18 h-fit">
+              <div className="mt-4 space-y-2.5">
+                <div className="flex justify-between">
+                  <h3>الدفع</h3>
+                  <p>نقداً عند الاستلام</p>
+                </div>
+                <div className="flex justify-between">
+                  <h3>المدة حتى الاستلام</h3>
+                  <p>من 24 ساعة - حتى اسبوع</p>
+                </div>
+                <div className="flex justify-between">
+                  <div>رسوم الشحن</div>
+                  <div>حسب الموقع</div>
+                </div>
+              </div>
 
-            <div className="mt-4 space-y-2.5">
-              <h2 className="my-2 text-lg font-bold">معلومات الشحن</h2>
-              <div className="flex justify-between">
-                <h3 className="">الولاية</h3>
-                <select
-                  name=""
-                  id=""
-                  className="border border-slate-500 p-2 rounded-xl"
+              <div className="mt-5 pt-2 border-t border-t-slate-300 space-y-2">
+                <div className="flex justify-between font-bold text-xl">
+                  <div>المجموع الاجمالي</div>
+                  <div>{total.toLocaleString()} ج.س</div>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="w-full text-base md:text-xl py-3 bg-(--main-color)/80 text-white rounded-2xl cursor-pointer transition-colors duration-300 hover:bg-(--main-color)"
                 >
-                  <option value="">الخرطوم</option>
-                  <option value="">بحري</option>
-                  <option value="">امدرمان</option>
-                  <option value="">الجزيرة</option>
-                  <option value="">مدني</option>
-                  <option value="">الحصاحيصا</option>
-                  <option value="">بورتسودان</option>
-                </select>
+                  تأكيد الطلب
+                </button>
               </div>
-              <div className="flex justify-between">
-                <h3>المدة حتى الاستلام</h3>
-                <p>24 ساعة</p>
-              </div>
-              <div className="flex justify-between">
-                <h3>رسوم الشحن</h3>
-                <p>10000 ج.س</p>
-              </div>
-            </div>
-            <div className="mt-4 flex justify-between">
-              <div className="text-lg font-bold">المجموع الفرعي</div>
-              <div className="font-semibold">
-                {subtotal?.toLocaleString()} ج.س
-              </div>
-            </div>
-
-            <div className="mt-5 pt-2 border-t border-t-slate-300 space-y-2">
-              <div className="flex justify-between">
-                <div>رسوم الشحن</div>
-                <div>{shippingFee.toLocaleString()} ج.س</div>
-              </div>
-              <div className="flex justify-between font-bold text-xl">
-                <div>المجموع الاجمالي</div>
-                <div>{total.toLocaleString()} ج.س</div>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <button className="w-full text-base md:text-xl py-3 bg-(--main-color)/80 text-white rounded-2xl cursor-pointer transition-colors duration-300 hover:bg-(--main-color)">
-                تأكيد الطلب
-              </button>
-            </div>
-          </aside>
+              <OrderConfirmModal
+                isOpen={showConfirm}
+                onClose={() => setShowConfirm(false)}
+                total={total}
+                onConfirm={handleConfirm}
+              />
+            </aside>
+          </div>
         </div>
       )}
     </main>

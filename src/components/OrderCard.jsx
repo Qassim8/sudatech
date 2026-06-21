@@ -1,13 +1,26 @@
 const OrderCard = ({ order }) => {
+  const formatDate = (isoString) => {
+    if (!isoString) return "";
+
+    const date = new Date(isoString);
+
+    return new Intl.DateTimeFormat("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }).format(date);
+  };
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-5">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="font-semibold">رقم الطلب #: {order.number}</h3>
+          <h3 className="font-semibold">رقم الطلب : #{order.documentId}</h3>
           <div className="flex items-center gap-1 text-sm text-(--text-color)">
-            <p> {order.summary.quantity} منتجات</p>
+            <p>تم بواسطة: {order?.customer}</p>
             <p>|</p>
-            <p>التاريخ: {order.summary.date} </p>
+            <p> {order?.items?.length} منتجات</p>
+            <p>|</p>
+            <p>التاريخ: {formatDate(order?.createdAt)} </p>
           </div>
         </div>
       </div>
@@ -17,47 +30,52 @@ const OrderCard = ({ order }) => {
           <div className="flex items-center justify-between">
             <span className="font-semibold">الحالة:</span>{" "}
             <span
-              className={`${order.status === "Shipped" ? "text-green-600" : "text-amber-600"}`}
+              className={`${order?.order_status === "Shipped" ? "text-green-600" : "text-amber-600"}`}
             >
-              {order.statusText}
+              {order?.order_status}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="font-semibold">تاريخ الطلب:</span>{" "}
-            {order.deliveryDate}
+            {formatDate(order?.createdAt)}
           </div>
           <div className="flex items-center justify-between">
-            <span className="font-semibold">الولاية: </span> {order.address}
+            <span className="font-semibold">العنوان: </span> {order?.address}
           </div>
           <div className="flex items-center justify-between mt-3">
             <span className="text-lg text-slate-800 font-bold">الاجمالي:</span>{" "}
-            <p className="text-lg">{order.total}</p>
+            <p className="font-semibold text-emerald-600">
+              {order?.total_price} ج.س
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 pt-3 border-t border-t-slate-300">
-        {order.items.map((item, idx) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 py-3 border-y border-y-slate-300">
+        {order.items?.map((item, idx) => (
           <div
             key={idx}
             className="flex gap-3 items-center bg-(--color-background) p-3 rounded-md"
           >
-            <div className="w-20 h-20 rounded-2xl bg-black/50">
+            <div className="w-20 h-16 rounded-xl flex justify-center items-center bg-white">
               <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-full object-cover"
+                src={item?.thumbnail}
+                alt={item?.title}
+                className="w-full max-h-full object-cover"
               />
             </div>
             <div>
-              <h4 className="text-sm font-semibold">{item.name}</h4>
+              <h4 className="text-sm font-semibold">{item?.title}</h4>
               <p className="text-xs text-(--text-color)">
-                الكمية: {item.quantity} • {item.price}
+                الكمية: {item?.quantity} * {item?.price} ج.س
               </p>
             </div>
           </div>
         ))}
       </div>
+      <button className="mt-3 py-2 px-5 bg-red-500 border border-slate-300 rounded-2xl cursor-pointer transition-colors duration-300 text-white hover:bg-red-600/80 hover:border-transparent">
+        إلغاء
+      </button>
     </div>
   );
 };

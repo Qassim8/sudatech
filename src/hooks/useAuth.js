@@ -21,7 +21,8 @@ const useAuth = () => {
     },
     onSuccess: ({ jwt, user }) => {
       localStorage.setItem("userToken", jwt);
-      localStorage.setItem("userData", user);
+      localStorage.setItem("userData", user.documentId);
+      console.log(user);
       clearCart();
       navigate("/");
     },
