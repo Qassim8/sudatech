@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
         )}
       </div>
 
-      <div className="relative h-32 md:h-60 flex justify-center items-center">
+      <div className="relative h-32 md:h-60 mb-3 flex justify-center items-center border-b border-b-slate-200">
         <img
           src={`${product?.thumbnail?.url}`}
           alt={product?.title}

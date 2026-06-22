@@ -11,6 +11,7 @@ import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import Orders from "./pages/orders";
 import Wishlist from "./pages/wishlist";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="cart" element={<Cart />} />
           <Route path="product/:id" element={<ProductDetail />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
         <Route path="login" element={<Login />} />
