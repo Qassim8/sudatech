@@ -79,7 +79,7 @@ const Cart = () => {
               </h2>
               <aside className="border border-slate-300 rounded-2xl p-6 sticky top-18 h-fit">
                 <div className="mt-4 space-y-2.5">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm md:text-base">
                     <h3>الدفع</h3>
                     <p>نقداً عند الاستلام</p>
                   </div>
@@ -96,7 +96,7 @@ const Cart = () => {
                 <div className="mt-5 pt-2 border-t border-t-slate-300 space-y-2">
                   <div className="flex justify-between font-bold text-xl">
                     <div>المجموع الاجمالي</div>
-                    <div>{totalCartPrice.toLocaleString()} ج.س</div>
+                    <div>${totalCartPrice.toLocaleString()}</div>
                   </div>
                 </div>
 

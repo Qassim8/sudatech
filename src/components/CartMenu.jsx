@@ -100,8 +100,7 @@ const CartMenu = ({ show, hide }) => {
                 المجموع الكلي:
               </span>
               <span className="text-lg font-black text-emerald-600">
-                {totalPrice.toLocaleString()}{" "}
-                <span className="text-xs font-normal text-gray-400">ج.س</span>
+                ${totalPrice.toLocaleString()}
               </span>
             </div>
 

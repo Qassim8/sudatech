@@ -13,8 +13,8 @@ import { TiWiFi } from "react-icons/ti";
 const Footer = () => {
   return (
     <footer className="bg-(--color-background) border-t border-slate-200 mt-12">
-      <div className="container py-10 grid grid-cols-1 md:grid-cols-4 gap-6 border-b border-slate-200">
-        <div>
+      <div className="container py-10 grid grid-cols-2 md:grid-cols-4 gap-6 border-b border-slate-200">
+        <div className="col-span-2 md:col-span-1">
           <div className="flex items-center gap-2 mb-5">
             <div className="flex justify-center items-center text-white bg-linear-to-bl from-(--main-color) to-(--gr-color) h-9 w-9 rounded-2xl shadow-lg shadow-(--main-color)">
               <TiWiFi className="text-lg" />

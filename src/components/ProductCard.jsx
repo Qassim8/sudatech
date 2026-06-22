@@ -36,7 +36,7 @@ const ProductCard = ({ product }) => {
 
       <div className="relative h-32 md:h-60 flex justify-center items-center">
         <img
-          src={`http://localhost:1337${product?.thumbnail?.url}`}
+          src={`${product?.thumbnail?.url}`}
           alt={product?.title}
           className="max-h-full max-w-full group-hover:scale-105 transition-transform duration-500"
         />
@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
       <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-5">
         <div className="grow flex items-center gap-2 pt-1">
           <span className="text-base md:text-xl font-medium text-emerald-700">
-            {product?.price} <span className="text-xs"> ج.س</span>
+            ${product?.price}
           </span>
           {product?.oldPrice && (
             <span className="text-sm text-slate-400 line-through">

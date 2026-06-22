@@ -9,11 +9,11 @@ const AboutSections = () => {
           <MainTitle
             pos="text-start"
             title="من نحن"
-            subtitle="سوداتل في لمحة"
+            subtitle="سوداتك في لمحة"
           />
           <p className="text-(--text-color)">
-            سوداتل تقدم حلول اتصالات متكاملة للشركات والمؤسسات والأفراد. نمتلك
-            خبرة طويلة في تصميم ونشر شبكات الاتصالات وتزويد الأجهزة والخدمات ذات
+            نقدم حلول اتصالات متكاملة للشركات والمؤسسات والأفراد. نمتلك خبرة
+            طويلة في تصميم ونشر شبكات الاتصالات وتزويد الأجهزة والخدمات ذات
             الجودة العالية لدعم استمرارية أعمال العملاء. نحن ملتزمون بتوفير أحدث
             التقنيات وخدمات الدعم الفني لضمان رضا العملاء وتحقيق نجاحهم في عالم
             رقمي متطور. من خلال شراكاتنا مع كبار مزودي التكنولوجيا، نضمن توفير
@@ -25,9 +25,10 @@ const AboutSections = () => {
         </div>
         <div className="flex-1 rounded-2xl overflow-hidden">
           <img
-            src="https://www.centillionsolutions.com.au/wp-content/uploads/2023/10/Industrial-Telecom-Security.png"
+            src="/about.png"
             alt="About Us"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
       </div>

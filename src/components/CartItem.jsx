@@ -43,7 +43,7 @@ const CartItem = ({ item }) => {
           className="w-20 h-20 bg-gray-50 rounded-xl flex justify-center items-center cursor-pointer overflow-hidden p-1 hover:opacity-80 transition"
         >
           <img
-            src={`http://localhost:1337${thumbnailUrl}`}
+            src={thumbnailUrl}
             alt={title}
             className="max-h-full max-w-full object-contain"
           />
@@ -92,8 +92,7 @@ const CartItem = ({ item }) => {
         </button>
 
         <div className="text-sm md:text-base font-black text-emerald-700">
-          {(price * quantity).toLocaleString()}{" "}
-          <span className="text-xs font-normal text-gray-400">ج.س</span>
+          ${(price * quantity).toLocaleString()}
         </div>
       </div>
     </div>

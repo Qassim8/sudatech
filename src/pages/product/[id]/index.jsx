@@ -50,7 +50,7 @@ const ProductDetail = () => {
           <div>
             <div className="bg-white h-60 md:h-96 rounded-2xl shadow">
               <img
-                src={`http://localhost:1337${imageUrl ? imageUrl : product?.thumbnail?.url}`}
+                src={`${imageUrl ? imageUrl : product?.thumbnail?.url}`}
                 alt={product?.title}
                 className="w-full max-h-full object-contain"
               />
@@ -64,7 +64,7 @@ const ProductDetail = () => {
                   key={documentId}
                 >
                   <img
-                    src={`http://localhost:1337${url}`}
+                    src={`${url}`}
                     alt={name}
                     className="max-w-full max-h-full"
                   />

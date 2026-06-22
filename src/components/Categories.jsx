@@ -17,7 +17,7 @@ const CategoryCard = ({ category }) => {
     >
       {/* Image */}
       <img
-        src={`http://localhost:1337${category.image[0].url}`}
+        src={`${category.image[0].url}`}
         alt={category.title}
         className="absolute inset-0 min-h-full w-full transition-transform duration-700 group-hover:scale-110"
       />

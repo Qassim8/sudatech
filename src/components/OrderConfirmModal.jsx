@@ -85,9 +85,7 @@ const OrderConfirmModal = ({ isOpen, onClose, total, onConfirm }) => {
           <div className="pt-2 border-t border-t-slate-200">
             <div className="flex justify-between items-center mb-3">
               <div className="text-lg font-bold">المجموع الاجمالي</div>
-              <div className="font-bold">
-                {Number(total).toLocaleString()} ج.س
-              </div>
+              <div className="font-bold">${Number(total).toLocaleString()}</div>
             </div>
 
             <div className="flex gap-2">

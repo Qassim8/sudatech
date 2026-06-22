@@ -8,9 +8,9 @@ import toast from "react-hot-toast";
 const useAuth = () => {
   const authBase = `${BASE_URL}/auth/local`;
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const clearCart = cartStore((state) => state.clearCart);
 
+  // ==================== [ تسجيل الدخول ] ====================
   const {
     mutate: login,
     isPending: loginPending,
@@ -30,12 +30,16 @@ const useAuth = () => {
       toast.success("تم تسجيل الدخول بنجاح");
     },
     onError: (err) => {
+      // الوصول الصحيح لرسالة خطأ سترابي من خلال Axios
       const msg =
-        err?.response?.error?.message || err?.message || "فشل تسجيل الدخول";
+        err?.response?.data?.error?.message ||
+        err?.message ||
+        "فشل تسجيل الدخول";
       toast.error(msg);
     },
   });
 
+  // ==================== [ إنشاء حساب جديد ] ====================
   const {
     mutate: register,
     isPending: registerPending,
@@ -43,18 +47,19 @@ const useAuth = () => {
     isError: registerError,
   } = useMutation({
     mutationFn: async (userData) => {
-      const res = await axios.post(`${authBase}/register`, userData, {
-        headers: "",
-      });
-      if (!res.ok) throw new Error("مشكلة في بيانات المستخدم");
-      return res.data;
+      // تم إزالة التحقق من res.ok لأن Axios يتكفل بها تلقائياً عند حدوث خطأ 400
+      const { data } = await axios.post(`${authBase}/register`, userData);
+      return data;
     },
     onSuccess: () => {
-      toast.success("تم إنشاء الحساب بنجاح");
+      toast.success("تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.");
     },
     onError: (err) => {
+      // الوصول الصحيح لرسالة خطأ سترابي مثل: Email or Username are already taken
       const msg =
-        err?.response?.data?.message || err?.message || "فشل إنشاء الحساب";
+        err?.response?.data?.error?.message ||
+        err?.message ||
+        "فشل إنشاء الحساب";
       toast.error(msg);
     },
   });

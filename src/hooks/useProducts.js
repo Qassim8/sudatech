@@ -67,7 +67,7 @@ const useProducts = ({ productId, page = 1, pageSize = 9 } = {}) => {
       toast.error(msg);
     },
     placeholderData: (previousData) => previousData,
-    staleTime: 20000,
+    staleTime: 10000 * 500,
   });
 
   const { data: singleProduct, isLoading: singleProductLoading } = useQuery({
@@ -92,6 +92,7 @@ const useProducts = ({ productId, page = 1, pageSize = 9 } = {}) => {
         .getQueryData(["products"])
         ?.find((p) => p.documentId === productId);
     },
+    staleTime: 30000,
   });
 
   return {

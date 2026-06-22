@@ -3,6 +3,7 @@ import ProductCard from "../../components/ProductCard";
 import useWishlist from "../../hooks/useWishlist";
 import ForShowList from "../../components/ForShowList";
 import Breadcrumbs from "../../components/Breadcrumb";
+import { LuHeart } from "react-icons/lu";
 
 const Wishlist = () => {
   const token = localStorage.getItem("userToken");
@@ -30,20 +31,25 @@ const Wishlist = () => {
 
     if (wishlist?.length < 1) {
       return (
-        <main>
-          <div className="container py-12">
-            <div>
-              <h2 className="text-2xl font-bold text-(--main-color)">
-                قائمة المفضلات
-              </h2>
-              <div className="mt-6 bg-white rounded-2xl shadow p-6">
-                <p className="text-(--text-color)">
-                  لم تقم بإضافة أي عنصر للمفضلة بعد.
-                </p>
-              </div>
-            </div>
+        <div className="h-full flex flex-col justify-center items-center text-center p-6 space-y-4">
+          <div className="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center text-2xl">
+            <LuHeart />
           </div>
-        </main>
+          <div>
+            <h3 className="text-lg font-bold text-gray-800 mb-1">
+              سلتك فارغة تماماً
+            </h3>
+            <p className="text-base text-gray-400 max-w-[250px] mx-auto">
+              قم بالتجول في المتجر وأضف أفضل الراوترات والخوادم إلى سلتك الآن.
+            </p>
+          </div>
+          <Link
+            to="/shop"
+            className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition shadow-xs"
+          >
+            انتقل للمتجر
+          </Link>
+        </div>
       );
     }
     return (

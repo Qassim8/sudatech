@@ -45,7 +45,7 @@ const OrderCard = ({ order }) => {
           <div className="flex items-center justify-between mt-3">
             <span className="text-lg text-slate-800 font-bold">الاجمالي:</span>{" "}
             <p className="font-semibold text-emerald-600">
-              {order?.total_price} ج.س
+              ${order?.total_price}
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ const OrderCard = ({ order }) => {
           >
             <div className="w-20 h-16 rounded-xl flex justify-center items-center bg-white">
               <img
-                src={`http://localhost:1337${item?.thumbnail}`}
+                src={item?.thumbnail}
                 alt={item?.title}
                 className="w-full max-h-full object-cover"
               />
